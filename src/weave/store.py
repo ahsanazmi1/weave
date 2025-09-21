@@ -6,7 +6,8 @@ import json
 from abc import ABC, abstractmethod
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
-from uuid import uuid4
+
+from ocn_common.trace import new_trace_id
 
 from sqlalchemy import Column, DateTime, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -74,7 +75,7 @@ class InMemoryStorage(StorageBackend):
         metadata: Optional[Dict[str, Any]] = None
     ) -> str:
         """Store a receipt in memory."""
-        receipt_id = str(uuid4())
+        receipt_id = new_trace_id()
 
         receipt_data = {
             "receipt_id": receipt_id,
@@ -139,7 +140,7 @@ class SQLiteStorage(StorageBackend):
         metadata: Optional[Dict[str, Any]] = None
     ) -> str:
         """Store a receipt in SQLite."""
-        receipt_id = str(uuid4())
+        receipt_id = new_trace_id()
 
         receipt = Receipt(
             receipt_id=receipt_id,
