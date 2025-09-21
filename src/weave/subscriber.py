@@ -10,9 +10,10 @@ from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from .crypto import hash_payload, VCStubs
+from .crypto import hash_payload
 from .settings import settings
 from .store import StorageBackend, get_storage
+from .trust_registry import get_trust_registry
 
 # Configure logging
 logging.basicConfig(level=getattr(logging, settings.log_level))
@@ -36,6 +37,9 @@ class CloudEvent(BaseModel):
     datacontenttype: Optional[str] = Field(None, description="Data content type")
     dataschema: Optional[str] = Field(None, description="Data schema URI")
     data: Dict[str, Any] = Field(..., description="Event data payload")
+    # Trust Registry fields
+    provider_id: Optional[str] = Field(None, description="Credential provider identifier")
+    extensions: Optional[Dict[str, Any]] = Field(None, description="CloudEvent extensions")
 
 
 class ReceiptResponse(BaseModel):
@@ -97,28 +101,49 @@ async def receive_cloud_event(
 ):
     """
     Receive and store a CloudEvent as a hash receipt.
-    
+
     This endpoint:
     1. Validates the CloudEvent structure
     2. Checks if the event type is allowed
-    3. Generates a hash of the event data
-    4. Stores only the hash and metadata (no PII/PCI)
-    5. Returns a receipt ID for tracking
+    3. Enforces trust registry for provider_id (if present)
+    4. Generates a hash of the event data
+    5. Stores only the hash and metadata (no PII/PCI)
+    6. Returns a receipt ID for tracking
     """
     try:
+        # Use subject as trace_id, fallback to event id
+        trace_id = event.subject or event.id
+        
+        # Trust Registry enforcement
+        provider_id = None
+        
+        # Check for provider_id in data first, then extensions (data takes precedence)
+        if "provider_id" in event.data:
+            provider_id = event.data["provider_id"]
+        elif event.extensions and "provider_id" in event.extensions:
+            provider_id = event.extensions["provider_id"]
+        
+        # If provider_id is present and not empty, validate against trust registry
+        if provider_id is not None and provider_id != "":  # Check for valid provider_id
+            trust_registry = get_trust_registry()
+            if not trust_registry.is_allowed(provider_id):
+                logger.warning(f"Trust registry denied provider '{provider_id}' for trace_id '{trace_id}'")
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Provider '{provider_id}' not in trust registry allowlist"
+                )
+            logger.info(f"Trust registry allowed provider '{provider_id}' for trace_id '{trace_id}'")
+        
         # Validate event type is allowed
         if event.type not in settings.allowed_event_types:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Event type '{event.type}' not allowed. Allowed types: {settings.allowed_event_types}"
             )
-        
-        # Use subject as trace_id, fallback to event id
-        trace_id = event.subject or event.id
-        
+
         # Generate hash of the event data (this is what we store, not the raw data)
         event_hash = hash_payload(event.data)
-        
+
         # Prepare metadata (non-sensitive information only)
         metadata = {
             "event_id": event.id,
@@ -126,9 +151,11 @@ async def receive_cloud_event(
             "datacontenttype": event.datacontenttype,
             "dataschema": event.dataschema,
             "received_at": datetime.utcnow().isoformat(),
-            "client_ip": request.client.host if request.client else None
+            "client_ip": request.client.host if request.client else None,
+            "provider_id": provider_id,  # Include provider_id in metadata
+            "trust_verified": provider_id is not None  # Track if trust was verified
         }
-        
+
         # Store receipt (only hash and metadata, no raw event data)
         receipt_id = storage.store_receipt(
             trace_id=trace_id,
@@ -136,9 +163,9 @@ async def receive_cloud_event(
             event_hash=event_hash,
             metadata=metadata
         )
-        
+
         logger.info(f"Stored receipt {receipt_id} for event {event.id} (type: {event.type})")
-        
+
         return ReceiptResponse(
             receipt_id=receipt_id,
             trace_id=trace_id,
@@ -146,7 +173,7 @@ async def receive_cloud_event(
             event_hash=event_hash,
             time=datetime.utcnow().isoformat()
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -182,7 +209,7 @@ async def list_receipts(
     """List receipts with optional filtering by trace_id."""
     if limit > 1000:
         limit = 1000  # Cap limit to prevent abuse
-    
+
     if trace_id:
         receipts = storage.get_receipts_by_trace_id(trace_id)
         total = len(receipts)
@@ -193,7 +220,7 @@ async def list_receipts(
         # For SQLite, we'd need a separate count query for total
         # For simplicity, we'll use len() which works for in-memory
         total = len(receipts)  # This is approximate for SQLite
-    
+
     return ReceiptListResponse(
         receipts=receipts,
         total=total,
@@ -234,7 +261,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     uvicorn.run(
         "subscriber:app",
         host=settings.host,

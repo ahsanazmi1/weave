@@ -1,0 +1,127 @@
+# OCN Trust Registry v0 - Credential Provider Allowlist
+# This file defines the allowed credential providers for Weave receipt submission
+
+metadata:
+  version: "v0.1.0"
+  created: "2024-01-01T00:00:00Z"
+  description: "OCN Trust Registry v0 - Credential Provider Allowlist"
+  schema_version: "1.0"
+  last_updated: "2024-01-21T12:00:00Z"
+
+providers:
+  # OCN Core Services
+  - id: "ocn-orca-v1"
+    name: "OCN Orca v1"
+    description: "OCN Orca Decision Engine v1"
+    type: "decision_engine"
+    status: "active"
+    trust_level: "high"
+    version: "1.0.0"
+    domains: ["orca.ocn.ai", "api.orca.ocn.ai"]
+    capabilities: ["decision_engine", "risk_assessment", "fraud_detection"]
+    
+  - id: "ocn-weave-v1"
+    name: "OCN Weave v1"
+    description: "OCN Weave Receipt Store v1"
+    type: "receipt_store"
+    status: "active"
+    trust_level: "high"
+    version: "1.0.0"
+    domains: ["weave.ocn.ai", "api.weave.ocn.ai"]
+    capabilities: ["receipt_storage", "blockchain_integration", "audit_trail"]
+    
+  - id: "ocn-okra-v1"
+    name: "OCN Okra v1"
+    description: "OCN Okra Credit Agent v1"
+    type: "credit_agent"
+    status: "active"
+    trust_level: "medium"
+    version: "1.0.0"
+    domains: ["okra.ocn.ai", "api.okra.ocn.ai"]
+    capabilities: ["credit_assessment", "loan_processing", "risk_evaluation"]
+    
+  - id: "ocn-opal-v1"
+    name: "OCN Opal v1"
+    description: "OCN Opal Wallet Agent v1"
+    type: "wallet_agent"
+    status: "active"
+    trust_level: "medium"
+    version: "1.0.0"
+    domains: ["opal.ocn.ai", "api.opal.ocn.ai"]
+    capabilities: ["wallet_management", "payment_processing", "spend_controls"]
+
+  # Development and Testing
+  - id: "test-provider"
+    name: "Test Provider"
+    description: "Test credential provider for development and testing"
+    type: "test"
+    status: "active"
+    trust_level: "low"
+    version: "0.1.0"
+    domains: ["test.ocn.ai", "localhost"]
+    capabilities: ["testing", "development", "demo"]
+    
+  # External Integrations (Examples)
+  - id: "partner-fintech-alpha"
+    name: "Partner Fintech Alpha"
+    description: "Trusted fintech partner for payment processing"
+    type: "external_partner"
+    status: "active"
+    trust_level: "medium"
+    version: "1.2.0"
+    domains: ["alpha.fintech.com", "api.alpha.fintech.com"]
+    capabilities: ["payment_processing", "fraud_detection", "compliance"]
+    
+  - id: "bank-integration-beta"
+    name: "Bank Integration Beta"
+    description: "Banking partner for financial services integration"
+    type: "banking_partner"
+    status: "active"
+    trust_level: "high"
+    version: "2.1.0"
+    domains: ["bank-beta.com", "api.bank-beta.com"]
+    capabilities: ["banking_services", "account_verification", "transaction_processing"]
+    
+  # Suspended/Inactive Providers (Examples)
+  - id: "deprecated-provider-v1"
+    name: "Deprecated Provider v1"
+    description: "Legacy provider being phased out"
+    type: "legacy"
+    status: "inactive"
+    trust_level: "low"
+    version: "0.9.0"
+    domains: ["deprecated.example.com"]
+    capabilities: ["legacy_support"]
+    notes: "Scheduled for removal in Q2 2024"
+    
+  - id: "compromised-provider"
+    name: "Compromised Provider"
+    description: "Provider suspended due to security incident"
+    type: "external"
+    status: "suspended"
+    trust_level: "none"
+    version: "1.0.0"
+    domains: ["compromised.example.com"]
+    capabilities: []
+    notes: "Suspended due to security incident on 2024-01-15"
+
+# Trust levels and their meanings
+trust_levels:
+  high: "Fully trusted OCN core services and verified banking partners"
+  medium: "Verified external partners and fintech integrations"
+  low: "Development, testing, and legacy providers"
+  none: "Suspended or compromised providers"
+
+# Provider status meanings
+status_definitions:
+  active: "Provider is operational and trusted"
+  inactive: "Provider is temporarily or permanently disabled"
+  suspended: "Provider is suspended due to issues (security, compliance, etc.)"
+
+# Usage guidelines
+usage_notes:
+  - "Only providers with status 'active' are allowed to submit receipts"
+  - "Trust levels are used for additional validation and monitoring"
+  - "Provider domains should match the source field in CloudEvents"
+  - "This registry should be updated regularly to reflect current partnerships"
+  - "All changes should be reviewed and approved by security team"

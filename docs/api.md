@@ -236,7 +236,7 @@ Get all receipts for a specific trace ID.
 The following CloudEvent types are accepted by default:
 
 - `ocn.orca.decision.v1` - Orca decision events
-- `ocn.orca.explanation.v1` - Orca explanation events  
+- `ocn.orca.explanation.v1` - Orca explanation events
 - `ocn.weave.audit.v1` - Weave audit events
 
 ## Usage Examples
