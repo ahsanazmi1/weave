@@ -10,6 +10,8 @@ from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+from ocn_common.trace import ensure_trace_id, inject_trace_id_ce, trace_middleware
+
 from .crypto import hash_payload, VCStubs
 from .settings import settings
 from .store import StorageBackend, get_storage
@@ -24,6 +26,9 @@ app = FastAPI(
     description="Receives and stores CloudEvents as hash receipts",
     version="0.1.0"
 )
+
+# Add trace middleware for automatic trace ID propagation
+app = trace_middleware(app)
 
 # Pydantic models for request/response
 class CloudEvent(BaseModel):
@@ -112,6 +117,7 @@ async def receive_cloud_event(
     """
     try:
         # Use subject as trace_id, fallback to event id
+        # For CloudEvents, we preserve the original trace ID even if it's not UUID4 format
         trace_id = event.subject or event.id
 
         # Trust Registry enforcement
