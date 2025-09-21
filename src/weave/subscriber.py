@@ -2,7 +2,6 @@
 FastAPI CloudEvents subscriber for Weave receipt storage.
 """
 
-import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -13,13 +12,14 @@ from pydantic import BaseModel, Field
 from ocn_common.trace import ensure_trace_id, inject_trace_id_ce, trace_middleware
 
 from .crypto import hash_payload, VCStubs
+from .logging_setup import get_traced_logger, setup_logging
 from .settings import settings
 from .store import StorageBackend, get_storage
 from .trust_registry import get_trust_registry
 
-# Configure logging
-logging.basicConfig(level=getattr(logging, settings.log_level))
-logger = logging.getLogger(__name__)
+# Set up structured logging with redaction
+setup_logging(level=settings.log_level, format_type='json')
+logger = get_traced_logger(__name__)
 
 app = FastAPI(
     title="Weave CloudEvents Subscriber",
