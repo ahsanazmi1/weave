@@ -1,0 +1,16 @@
+LICENSE
+README.md
+pyproject.toml
+src/weave/__init__.py
+src/weave/crypto.py
+src/weave/settings.py
+src/weave/store.py
+src/weave/subscriber.py
+src/weave.egg-info/PKG-INFO
+src/weave.egg-info/SOURCES.txt
+src/weave.egg-info/dependency_links.txt
+src/weave.egg-info/requires.txt
+src/weave.egg-info/top_level.txt
+tests/test_crypto.py
+tests/test_store.py
+tests/test_subscriber.py
