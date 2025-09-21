@@ -45,11 +45,11 @@ import hashlib
 def hash_payload(payload):
     # Convert to JSON with sorted keys for consistency
     json_str = json.dumps(payload, sort_keys=True, separators=(',', ':'))
-    
+
     # Generate SHA-256 hash
     hash_obj = hashlib.sha256(json_str.encode('utf-8'))
     hash_hex = hash_obj.hexdigest()
-    
+
     return f"sha256:{hash_hex}"
 ```
 
