@@ -2,6 +2,7 @@
 Configuration settings for Weave CloudEvents subscriber.
 """
 
+import os
 from typing import List, Optional
 
 from pydantic_settings import BaseSettings
@@ -31,7 +32,7 @@ class Settings(BaseSettings):
 
     # Logging
     log_level: str = "INFO"
-    
+
     # Trust Registry
     trust_registry_path: Optional[str] = None
 

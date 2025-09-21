@@ -10,7 +10,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from .crypto import hash_payload
+from .crypto import hash_payload, VCStubs
 from .settings import settings
 from .store import StorageBackend, get_storage
 from .trust_registry import get_trust_registry
@@ -113,16 +113,16 @@ async def receive_cloud_event(
     try:
         # Use subject as trace_id, fallback to event id
         trace_id = event.subject or event.id
-        
+
         # Trust Registry enforcement
         provider_id = None
-        
+
         # Check for provider_id in data first, then extensions (data takes precedence)
         if "provider_id" in event.data:
             provider_id = event.data["provider_id"]
         elif event.extensions and "provider_id" in event.extensions:
             provider_id = event.extensions["provider_id"]
-        
+
         # If provider_id is present and not empty, validate against trust registry
         if provider_id is not None and provider_id != "":  # Check for valid provider_id
             trust_registry = get_trust_registry()
@@ -133,7 +133,7 @@ async def receive_cloud_event(
                     detail=f"Provider '{provider_id}' not in trust registry allowlist"
                 )
             logger.info(f"Trust registry allowed provider '{provider_id}' for trace_id '{trace_id}'")
-        
+
         # Validate event type is allowed
         if event.type not in settings.allowed_event_types:
             raise HTTPException(

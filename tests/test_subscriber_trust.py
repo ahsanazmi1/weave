@@ -40,15 +40,15 @@ class TestSubscriberTrustEnforcement:
                 "amount": 100.0
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201
-        
+
         data = response.json()
         assert data["receipt_id"] is not None
         assert data["trace_id"] == "txn_test_123"
         assert data["event_type"] == "ocn.orca.decision.v1"
-        
+
     def test_cloud_event_with_allowed_provider_succeeds(self, client, reset_registry):
         """Test CloudEvent with allowed provider_id is accepted."""
         event_data = {
@@ -64,14 +64,14 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": "ocn-orca-v1"  # Allowed provider
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201
-        
+
         data = response.json()
         assert data["receipt_id"] is not None
         assert data["trace_id"] == "txn_test_456"
-        
+
     def test_cloud_event_with_allowed_provider_in_extensions_succeeds(self, client, reset_registry):
         """Test CloudEvent with allowed provider_id in extensions is accepted."""
         event_data = {
@@ -89,14 +89,14 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": "ocn-weave-v1"  # Allowed provider in extensions
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201
-        
+
         data = response.json()
         assert data["receipt_id"] is not None
         assert data["trace_id"] == "txn_test_789"
-        
+
     def test_cloud_event_with_denied_provider_returns_403(self, client, reset_registry):
         """Test CloudEvent with denied provider_id returns 403."""
         event_data = {
@@ -112,14 +112,14 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": "malicious-provider"  # Not in allowlist
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 403
-        
+
         data = response.json()
         assert "not in trust registry allowlist" in data["error"]
         assert "malicious-provider" in data["error"]
-        
+
     def test_cloud_event_with_denied_provider_in_extensions_returns_403(self, client, reset_registry):
         """Test CloudEvent with denied provider_id in extensions returns 403."""
         event_data = {
@@ -137,14 +137,14 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": "unauthorized-provider"  # Not in allowlist
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 403
-        
+
         data = response.json()
         assert "not in trust registry allowlist" in data["error"]
         assert "unauthorized-provider" in data["error"]
-        
+
     def test_cloud_event_with_empty_provider_id_succeeds(self, client, reset_registry):
         """Test CloudEvent with empty provider_id is accepted (no trust check)."""
         event_data = {
@@ -160,13 +160,13 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": ""  # Empty string
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201
-        
+
         data = response.json()
         assert data["receipt_id"] is not None
-        
+
     def test_cloud_event_with_none_provider_id_succeeds(self, client, reset_registry):
         """Test CloudEvent with None provider_id is accepted (no trust check)."""
         event_data = {
@@ -182,17 +182,17 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": None  # None value
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201
-        
+
         data = response.json()
         assert data["receipt_id"] is not None
-        
+
     def test_multiple_allowed_providers(self, client, reset_registry):
         """Test multiple allowed providers work correctly."""
         allowed_providers = ["ocn-orca-v1", "ocn-weave-v1", "ocn-okra-v1", "test-provider"]
-        
+
         for i, provider_id in enumerate(allowed_providers):
             event_data = {
                 "specversion": "1.0",
@@ -207,13 +207,13 @@ class TestSubscriberTrustEnforcement:
                     "provider_id": provider_id
                 }
             }
-            
+
             response = client.post("/events", json=event_data)
             assert response.status_code == 201, f"Failed for provider {provider_id}"
-            
+
             data = response.json()
             assert data["receipt_id"] is not None
-            
+
     def test_provider_id_takes_precedence_over_extensions(self, client, reset_registry):
         """Test that provider_id in data takes precedence over extensions."""
         event_data = {
@@ -232,13 +232,13 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": "malicious-provider"  # Denied in extensions
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201  # Should succeed because data takes precedence
-        
+
         data = response.json()
         assert data["receipt_id"] is not None
-        
+
     def test_receipt_metadata_includes_provider_info(self, client, reset_registry):
         """Test that receipt metadata includes provider information."""
         event_data = {
@@ -254,23 +254,23 @@ class TestSubscriberTrustEnforcement:
                 "provider_id": "ocn-orca-v1"
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201
-        
+
         # Get the receipt to check metadata
         data = response.json()
         receipt_id = data["receipt_id"]
-        
+
         receipt_response = client.get(f"/receipts/{receipt_id}")
         assert receipt_response.status_code == 200
-        
+
         receipt_data = receipt_response.json()
         assert "metadata" in receipt_data
         metadata = receipt_data["metadata"]
         assert metadata["provider_id"] == "ocn-orca-v1"
         assert metadata["trust_verified"] is True
-        
+
     def test_receipt_metadata_without_provider(self, client, reset_registry):
         """Test that receipt metadata correctly handles missing provider."""
         event_data = {
@@ -286,17 +286,17 @@ class TestSubscriberTrustEnforcement:
                 # No provider_id
             }
         }
-        
+
         response = client.post("/events", json=event_data)
         assert response.status_code == 201
-        
+
         # Get the receipt to check metadata
         data = response.json()
         receipt_id = data["receipt_id"]
-        
+
         receipt_response = client.get(f"/receipts/{receipt_id}")
         assert receipt_response.status_code == 200
-        
+
         receipt_data = receipt_response.json()
         assert "metadata" in receipt_data
         metadata = receipt_data["metadata"]
@@ -322,15 +322,15 @@ class TestSubscriberTrustErrorHandling:
                 "provider_id": "malicious-provider"  # Denied provider
             }
         }
-        
+
         response = client.post("/events", json=event_data)
-        
+
         # Should return 403 for denied provider, not 400 for invalid event type
         assert response.status_code == 403
-        
+
         data = response.json()
         assert "not in trust registry allowlist" in data["error"]
-        
+
     def test_malformed_provider_id_handling(self, client, reset_registry):
         """Test handling of malformed provider_id values."""
         test_cases = [
@@ -338,7 +338,7 @@ class TestSubscriberTrustErrorHandling:
             {"provider_id": {}},   # Object instead of string
             {"provider_id": []},   # Array instead of string
         ]
-        
+
         for i, provider_data in enumerate(test_cases):
             event_data = {
                 "specversion": "1.0",
@@ -353,11 +353,11 @@ class TestSubscriberTrustErrorHandling:
                     **provider_data
                 }
             }
-            
+
             response = client.post("/events", json=event_data)
-            
+
             # Should return 403 for invalid provider_id (converted to string)
             assert response.status_code == 403
-            
+
             data = response.json()
             assert "not in trust registry allowlist" in data["error"]
