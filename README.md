@@ -1,6 +1,17 @@
-# weave
+# Weave — The Open Receipt Ledger
 
-Part of the Open Checkout Network (OCN).
+[![CI](https://github.com/ocn-ai/weave/actions/workflows/ci.yml/badge.svg)](https://github.com/ocn-ai/weave/actions/workflows/ci.yml)
+
+**Weave** is the **open, transparent receipt ledger** for the [Open Checkout Network (OCN)](https://github.com/ocn-ai/ocn-common).
+
+## Purpose
+
+Weave provides immutable receipt storage and retrieval for the OCN ecosystem. Unlike traditional closed receipt systems, Weave offers:
+
+- **Transparent Receipt Storage** - Clear, auditable receipt ledger
+- **Structured Logging** - Enterprise-grade JSON logging with automatic redaction
+- **Open Architecture** - Integrates seamlessly with OCN protocols
+- **MCP Integration** - Model Context Protocol support for agent interactions
 
 ## Dev Quickstart
 ```bash
@@ -48,3 +59,14 @@ logger.info("Processing receipt for user@example.com with card ending in 1111")
   "line": 142
 }
 ```
+
+## Related OCN Repositories
+
+- [Orca](https://github.com/ocn-ai/orca): The Open Checkout Agent
+- [Okra](https://github.com/ocn-ai/okra): The Open Credit Agent
+- [Onyx](https://github.com/ocn-ai/onyx): The Open Trust Registry
+- [Oasis](https://github.com/ocn-ai/oasis): The Open Treasury Agent
+- [Orion](https://github.com/ocn-ai/orion): The Open Payout Agent
+- [Opal](https://github.com/ocn-ai/opal): The Open Payment Agent
+- [Olive](https://github.com/ocn-ai/olive): The Open Loyalty Agent
+- [ocn-common](https://github.com/ocn-ai/ocn-common): Common utilities and schemas

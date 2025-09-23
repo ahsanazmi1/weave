@@ -3,6 +3,7 @@ README.md
 pyproject.toml
 src/weave/__init__.py
 src/weave/crypto.py
+src/weave/logging_setup.py
 src/weave/settings.py
 src/weave/store.py
 src/weave/subscriber.py
