@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "coverage", "ruff", "black", "mypy", "types-PyYAML"]
+dev = ["pytest>=8", "coverage", "ruff", "black", "mypy", "types-PyYAML", "httpx", "pytest-cov"]
 
 [tool.ruff]
 line-length = 100

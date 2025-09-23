@@ -12,3 +12,4 @@ coverage
 ruff
 black
 mypy
+types-PyYAML

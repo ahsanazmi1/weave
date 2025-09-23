@@ -15,12 +15,31 @@ Weave provides immutable receipt storage and retrieval for the OCN ecosystem. Un
 - **Open Architecture** - Integrates seamlessly with OCN protocols
 - **MCP Integration** - Model Context Protocol support for agent interactions
 
-## Dev Quickstart
+## Quickstart (≤ 60s)
+
 ```bash
-python -m venv .venv && . .venv/bin/activate
-pip install -U pip && pip install -e .[dev]
-pytest -q
+# Clone and setup
+git clone https://github.com/ocn-ai/weave.git
+cd weave
+
+# Setup development environment
+make setup
+
+# Run tests
+make test
+
+# Start the service
+make run
 ```
+
+### Available Make Commands
+
+- `make setup` - Create venv, install deps + dev extras, install pre-commit hooks
+- `make lint` - Run ruff and black checks
+- `make fmt` - Format code with black
+- `make test` - Run pytest with coverage
+- `make run` - Start FastAPI app with uvicorn
+- `make clean` - Remove virtual environment and cache files
 
 
 ## Structured Logging & Redaction
