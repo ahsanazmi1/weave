@@ -1,0 +1,15 @@
+{
+  "name": "weave",
+  "version": "0.1.0",
+  "capabilities": [
+    "getStatus",
+    "listReceipts"
+  ],
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/mcp/invoke",
+      "description": "MCP protocol endpoint for Weave receipt ledger operations"
+    }
+  ]
+}

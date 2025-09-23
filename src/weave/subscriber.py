@@ -16,6 +16,11 @@ from .logging_setup import get_traced_logger, setup_logging
 from .settings import settings
 from .store import StorageBackend, get_storage
 from .trust_registry import get_trust_registry
+import sys
+import os
+# Add the project root to the path to import our simplified MCP server
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+from mcp.server import router as mcp_router
 
 # Set up structured logging with redaction
 setup_logging(level=settings.log_level, format_type='json')
@@ -26,6 +31,9 @@ app = FastAPI(
     description="Receives and stores CloudEvents as hash receipts",
     version="0.1.0"
 )
+
+# Include MCP router
+app.include_router(mcp_router)
 
 # Add trace middleware for automatic trace ID propagation
 app = trace_middleware(app)
