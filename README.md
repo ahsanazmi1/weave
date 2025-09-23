@@ -1,5 +1,7 @@
 # Weave — The Open Receipt Ledger
 
+[![Contracts Validation](https://github.com/ocn-ai/weave/actions/workflows/contracts.yml/badge.svg)](https://github.com/ocn-ai/weave/actions/workflows/contracts.yml)
+[![Security Validation](https://github.com/ocn-ai/weave/actions/workflows/security.yml/badge.svg)](https://github.com/ocn-ai/weave/actions/workflows/security.yml)
 [![CI](https://github.com/ocn-ai/weave/actions/workflows/ci.yml/badge.svg)](https://github.com/ocn-ai/weave/actions/workflows/ci.yml)
 
 **Weave** is the **open, transparent receipt ledger** for the [Open Checkout Network (OCN)](https://github.com/ocn-ai/ocn-common).

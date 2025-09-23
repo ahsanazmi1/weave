@@ -19,7 +19,7 @@ class TestInMemoryStorage:
             trace_id="trace_123",
             event_type="ocn.orca.decision.v1",
             event_hash="sha256:abc123",
-            metadata={"key": "value"}
+            metadata={"key": "value"},
         )
 
         assert receipt_id is not None
@@ -46,22 +46,16 @@ class TestInMemoryStorage:
 
         # Store multiple receipts with same trace_id
         receipt_id1 = storage.store_receipt(
-            trace_id="trace_123",
-            event_type="ocn.orca.decision.v1",
-            event_hash="sha256:hash1"
+            trace_id="trace_123", event_type="ocn.orca.decision.v1", event_hash="sha256:hash1"
         )
 
         receipt_id2 = storage.store_receipt(
-            trace_id="trace_123",
-            event_type="ocn.orca.explanation.v1",
-            event_hash="sha256:hash2"
+            trace_id="trace_123", event_type="ocn.orca.explanation.v1", event_hash="sha256:hash2"
         )
 
         # Store receipt with different trace_id
         storage.store_receipt(
-            trace_id="trace_456",
-            event_type="ocn.orca.decision.v1",
-            event_hash="sha256:hash3"
+            trace_id="trace_456", event_type="ocn.orca.decision.v1", event_hash="sha256:hash3"
         )
 
         # Get receipts for trace_123
@@ -81,7 +75,7 @@ class TestInMemoryStorage:
             storage.store_receipt(
                 trace_id=f"trace_{i}",
                 event_type="ocn.orca.decision.v1",
-                event_hash=f"sha256:hash{i}"
+                event_hash=f"sha256:hash{i}",
             )
 
         # List receipts with pagination
@@ -96,9 +90,7 @@ class TestInMemoryStorage:
         storage = InMemoryStorage()
 
         receipt_id = storage.store_receipt(
-            trace_id="trace_123",
-            event_type="ocn.orca.decision.v1",
-            event_hash="sha256:abc123"
+            trace_id="trace_123", event_type="ocn.orca.decision.v1", event_hash="sha256:abc123"
         )
 
         receipt = storage.get_receipt(receipt_id)
@@ -124,7 +116,7 @@ class TestSQLiteStorage:
             trace_id="trace_123",
             event_type="ocn.orca.decision.v1",
             event_hash="sha256:abc123",
-            metadata={"key": "value"}
+            metadata={"key": "value"},
         )
 
         assert receipt_id is not None
@@ -151,22 +143,16 @@ class TestSQLiteStorage:
 
         # Store multiple receipts with same trace_id
         receipt_id1 = storage.store_receipt(
-            trace_id="trace_123",
-            event_type="ocn.orca.decision.v1",
-            event_hash="sha256:hash1"
+            trace_id="trace_123", event_type="ocn.orca.decision.v1", event_hash="sha256:hash1"
         )
 
         receipt_id2 = storage.store_receipt(
-            trace_id="trace_123",
-            event_type="ocn.orca.explanation.v1",
-            event_hash="sha256:hash2"
+            trace_id="trace_123", event_type="ocn.orca.explanation.v1", event_hash="sha256:hash2"
         )
 
         # Store receipt with different trace_id
         storage.store_receipt(
-            trace_id="trace_456",
-            event_type="ocn.orca.decision.v1",
-            event_hash="sha256:hash3"
+            trace_id="trace_456", event_type="ocn.orca.decision.v1", event_hash="sha256:hash3"
         )
 
         # Get receipts for trace_123
@@ -186,7 +172,7 @@ class TestSQLiteStorage:
             storage.store_receipt(
                 trace_id=f"trace_{i}",
                 event_type="ocn.orca.decision.v1",
-                event_hash=f"sha256:hash{i}"
+                event_hash=f"sha256:hash{i}",
             )
 
         # List receipts with pagination

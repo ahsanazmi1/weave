@@ -40,7 +40,7 @@ class StorageBackend(ABC):
         trace_id: str,
         event_type: str,
         event_hash: str,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Store a receipt and return receipt_id."""
         pass
@@ -72,7 +72,7 @@ class InMemoryStorage(StorageBackend):
         trace_id: str,
         event_type: str,
         event_hash: str,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Store a receipt in memory."""
         receipt_id = new_trace_id()
@@ -83,7 +83,7 @@ class InMemoryStorage(StorageBackend):
             "event_type": event_type,
             "event_hash": event_hash,
             "time": datetime.now(timezone.utc).isoformat(),
-            "metadata": json.dumps(metadata) if metadata else None
+            "metadata": json.dumps(metadata) if metadata else None,
         }
 
         self._receipts[receipt_id] = receipt_data
@@ -116,7 +116,7 @@ class InMemoryStorage(StorageBackend):
             if receipt_data["metadata"] and isinstance(receipt_data["metadata"], str):
                 receipt_data["metadata"] = json.loads(receipt_data["metadata"])
 
-        return all_receipts[offset:offset + limit]
+        return all_receipts[offset : offset + limit]
 
 
 class SQLiteStorage(StorageBackend):
@@ -137,7 +137,7 @@ class SQLiteStorage(StorageBackend):
         trace_id: str,
         event_type: str,
         event_hash: str,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Store a receipt in SQLite."""
         receipt_id = new_trace_id()
@@ -148,7 +148,7 @@ class SQLiteStorage(StorageBackend):
             event_type=event_type,
             event_hash=event_hash,
             time=datetime.now(timezone.utc),
-            receipt_metadata=json.dumps(metadata) if metadata else None
+            receipt_metadata=json.dumps(metadata) if metadata else None,
         )
 
         session = self.SessionLocal()
@@ -174,9 +174,12 @@ class SQLiteStorage(StorageBackend):
         """Retrieve all receipts for a trace_id."""
         session = self.SessionLocal()
         try:
-            receipts = session.query(Receipt).filter(
-                Receipt.trace_id == trace_id
-            ).order_by(Receipt.time.asc()).all()
+            receipts = (
+                session.query(Receipt)
+                .filter(Receipt.trace_id == trace_id)
+                .order_by(Receipt.time.asc())
+                .all()
+            )
             return [self._receipt_to_dict(receipt) for receipt in receipts]
         finally:
             session.close()
@@ -185,9 +188,13 @@ class SQLiteStorage(StorageBackend):
         """List receipts with pagination."""
         session = self.SessionLocal()
         try:
-            receipts = session.query(Receipt).order_by(
-                Receipt.time.desc()
-            ).offset(offset).limit(limit).all()
+            receipts = (
+                session.query(Receipt)
+                .order_by(Receipt.time.desc())
+                .offset(offset)
+                .limit(limit)
+                .all()
+            )
             return [self._receipt_to_dict(receipt) for receipt in receipts]
         finally:
             session.close()
@@ -199,7 +206,7 @@ class SQLiteStorage(StorageBackend):
             "trace_id": receipt.trace_id,
             "event_type": receipt.event_type,
             "event_hash": receipt.event_hash,
-            "time": receipt.time.isoformat()
+            "time": receipt.time.isoformat(),
         }
 
         if receipt.receipt_metadata:

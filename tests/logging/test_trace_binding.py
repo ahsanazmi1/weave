@@ -9,7 +9,8 @@ from unittest.mock import patch
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from src.weave.logging_setup import TraceLoggerAdapter, get_logger, get_traced_logger, setup_logging
 
@@ -93,7 +94,9 @@ class TestGetLogger:
 
     def test_get_traced_logger(self):
         """Test get_traced_logger function."""
-        with patch("src.weave.logging_setup.get_current_trace_id", return_value="current-trace-999"):
+        with patch(
+            "src.weave.logging_setup.get_current_trace_id", return_value="current-trace-999"
+        ):
             logger = get_traced_logger("test.module")
 
             assert isinstance(logger, TraceLoggerAdapter)

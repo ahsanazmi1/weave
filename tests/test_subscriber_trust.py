@@ -35,10 +35,7 @@ class TestSubscriberTrustEnforcement:
             "type": "ocn.orca.decision.v1",
             "subject": "txn_test_123",
             "time": "2024-01-01T12:00:00Z",
-            "data": {
-                "decision": "APPROVE",
-                "amount": 100.0
-            }
+            "data": {"decision": "APPROVE", "amount": 100.0},
         }
 
         response = client.post("/events", json=event_data)
@@ -61,8 +58,8 @@ class TestSubscriberTrustEnforcement:
             "data": {
                 "decision": "APPROVE",
                 "amount": 100.0,
-                "provider_id": "ocn-orca-v1"  # Allowed provider
-            }
+                "provider_id": "ocn-orca-v1",  # Allowed provider
+            },
         }
 
         response = client.post("/events", json=event_data)
@@ -81,13 +78,8 @@ class TestSubscriberTrustEnforcement:
             "type": "ocn.orca.decision.v1",
             "subject": "txn_test_789",
             "time": "2024-01-01T12:00:00Z",
-            "data": {
-                "decision": "APPROVE",
-                "amount": 100.0
-            },
-            "extensions": {
-                "provider_id": "ocn-weave-v1"  # Allowed provider in extensions
-            }
+            "data": {"decision": "APPROVE", "amount": 100.0},
+            "extensions": {"provider_id": "ocn-weave-v1"},  # Allowed provider in extensions
         }
 
         response = client.post("/events", json=event_data)
@@ -109,8 +101,8 @@ class TestSubscriberTrustEnforcement:
             "data": {
                 "decision": "APPROVE",
                 "amount": 100.0,
-                "provider_id": "malicious-provider"  # Not in allowlist
-            }
+                "provider_id": "malicious-provider",  # Not in allowlist
+            },
         }
 
         response = client.post("/events", json=event_data)
@@ -120,7 +112,9 @@ class TestSubscriberTrustEnforcement:
         assert "not in trust registry allowlist" in data["error"]
         assert "malicious-provider" in data["error"]
 
-    def test_cloud_event_with_denied_provider_in_extensions_returns_403(self, client, reset_registry):
+    def test_cloud_event_with_denied_provider_in_extensions_returns_403(
+        self, client, reset_registry
+    ):
         """Test CloudEvent with denied provider_id in extensions returns 403."""
         event_data = {
             "specversion": "1.0",
@@ -129,13 +123,8 @@ class TestSubscriberTrustEnforcement:
             "type": "ocn.orca.decision.v1",
             "subject": "txn_test_888",
             "time": "2024-01-01T12:00:00Z",
-            "data": {
-                "decision": "APPROVE",
-                "amount": 100.0
-            },
-            "extensions": {
-                "provider_id": "unauthorized-provider"  # Not in allowlist
-            }
+            "data": {"decision": "APPROVE", "amount": 100.0},
+            "extensions": {"provider_id": "unauthorized-provider"},  # Not in allowlist
         }
 
         response = client.post("/events", json=event_data)
@@ -154,11 +143,7 @@ class TestSubscriberTrustEnforcement:
             "type": "ocn.orca.decision.v1",
             "subject": "txn_test_777",
             "time": "2024-01-01T12:00:00Z",
-            "data": {
-                "decision": "APPROVE",
-                "amount": 100.0,
-                "provider_id": ""  # Empty string
-            }
+            "data": {"decision": "APPROVE", "amount": 100.0, "provider_id": ""},  # Empty string
         }
 
         response = client.post("/events", json=event_data)
@@ -176,11 +161,7 @@ class TestSubscriberTrustEnforcement:
             "type": "ocn.orca.decision.v1",
             "subject": "txn_test_666",
             "time": "2024-01-01T12:00:00Z",
-            "data": {
-                "decision": "APPROVE",
-                "amount": 100.0,
-                "provider_id": None  # None value
-            }
+            "data": {"decision": "APPROVE", "amount": 100.0, "provider_id": None},  # None value
         }
 
         response = client.post("/events", json=event_data)
@@ -201,11 +182,7 @@ class TestSubscriberTrustEnforcement:
                 "type": "ocn.orca.decision.v1",
                 "subject": f"txn_test_{provider_id}_{i}",
                 "time": "2024-01-01T12:00:00Z",
-                "data": {
-                    "decision": "APPROVE",
-                    "amount": 100.0,
-                    "provider_id": provider_id
-                }
+                "data": {"decision": "APPROVE", "amount": 100.0, "provider_id": provider_id},
             }
 
             response = client.post("/events", json=event_data)
@@ -226,11 +203,9 @@ class TestSubscriberTrustEnforcement:
             "data": {
                 "decision": "APPROVE",
                 "amount": 100.0,
-                "provider_id": "ocn-orca-v1"  # Allowed in data
+                "provider_id": "ocn-orca-v1",  # Allowed in data
             },
-            "extensions": {
-                "provider_id": "malicious-provider"  # Denied in extensions
-            }
+            "extensions": {"provider_id": "malicious-provider"},  # Denied in extensions
         }
 
         response = client.post("/events", json=event_data)
@@ -248,11 +223,7 @@ class TestSubscriberTrustEnforcement:
             "type": "ocn.orca.decision.v1",
             "subject": "txn_test_metadata",
             "time": "2024-01-01T12:00:00Z",
-            "data": {
-                "decision": "APPROVE",
-                "amount": 100.0,
-                "provider_id": "ocn-orca-v1"
-            }
+            "data": {"decision": "APPROVE", "amount": 100.0, "provider_id": "ocn-orca-v1"},
         }
 
         response = client.post("/events", json=event_data)
@@ -282,9 +253,9 @@ class TestSubscriberTrustEnforcement:
             "time": "2024-01-01T12:00:00Z",
             "data": {
                 "decision": "APPROVE",
-                "amount": 100.0
+                "amount": 100.0,
                 # No provider_id
-            }
+            },
         }
 
         response = client.post("/events", json=event_data)
@@ -319,8 +290,8 @@ class TestSubscriberTrustErrorHandling:
             "data": {
                 "decision": "APPROVE",
                 "amount": 100.0,
-                "provider_id": "malicious-provider"  # Denied provider
-            }
+                "provider_id": "malicious-provider",  # Denied provider
+            },
         }
 
         response = client.post("/events", json=event_data)
@@ -335,8 +306,8 @@ class TestSubscriberTrustErrorHandling:
         """Test handling of malformed provider_id values."""
         test_cases = [
             {"provider_id": 123},  # Integer instead of string
-            {"provider_id": {}},   # Object instead of string
-            {"provider_id": []},   # Array instead of string
+            {"provider_id": {}},  # Object instead of string
+            {"provider_id": []},  # Array instead of string
         ]
 
         for i, provider_data in enumerate(test_cases):
@@ -347,11 +318,7 @@ class TestSubscriberTrustErrorHandling:
                 "type": "ocn.orca.decision.v1",
                 "subject": f"txn_test_malformed_{i}",
                 "time": "2024-01-01T12:00:00Z",
-                "data": {
-                    "decision": "APPROVE",
-                    "amount": 100.0,
-                    **provider_data
-                }
+                "data": {"decision": "APPROVE", "amount": 100.0, **provider_data},
             }
 
             response = client.post("/events", json=event_data)

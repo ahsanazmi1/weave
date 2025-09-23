@@ -2,7 +2,6 @@
 Configuration settings for Weave CloudEvents subscriber.
 """
 
-import os
 from typing import List, Optional
 
 from pydantic_settings import BaseSettings
@@ -18,11 +17,11 @@ class Settings(BaseSettings):
     allowed_event_types: List[str] = [
         "ocn.orca.decision.v1",
         "ocn.orca.explanation.v1",
-        "ocn.weave.audit.v1"
+        "ocn.weave.audit.v1",
     ]
 
     # API configuration
-    host: str = "0.0.0.0"
+    host: str = "0.0.0.0"  # nosec B104
     port: int = 8000
     debug: bool = False
 

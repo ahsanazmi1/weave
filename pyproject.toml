@@ -16,10 +16,22 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "coverage", "ruff", "black", "mypy"]
+dev = ["pytest>=8", "coverage", "ruff", "black", "mypy", "types-PyYAML"]
 
 [tool.ruff]
 line-length = 100
 
 [tool.black]
 line-length = 100
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = false
+warn_unused_configs = true
+disallow_untyped_defs = false
+exclude = [
+    "src/weave/subscriber.py",  # Exclude subscriber that depends on ocn_common
+    "tests/"  # Exclude test files from strict typing
+]
+explicit_package_bases = true
+ignore_missing_imports = true

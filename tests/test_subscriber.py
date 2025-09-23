@@ -2,7 +2,6 @@
 Tests for FastAPI subscriber application.
 """
 
-
 import pytest
 from fastapi.testclient import TestClient
 
@@ -45,17 +44,10 @@ def sample_cloud_event():
         "data": {
             "ap2_version": "0.1.0",
             "intent": {
-                "actor": {
-                    "id": "user_12345",
-                    "type": "user"
-                },
+                "actor": {"id": "user_12345", "type": "user"},
                 "channel": "web",
-                "geo": {
-                    "country": "US",
-                    "region": "CA",
-                    "city": "San Francisco"
-                },
-                "metadata": {}
+                "geo": {"country": "US", "region": "CA", "city": "San Francisco"},
+                "metadata": {},
             },
             "cart": {
                 "amount": "99.99",
@@ -66,43 +58,27 @@ def sample_cloud_event():
                         "name": "Premium Widget",
                         "amount": "99.99",
                         "quantity": 1,
-                        "category": "Electronics"
+                        "category": "Electronics",
                     }
                 ],
-                "geo": {
-                    "country": "US",
-                    "region": "CA",
-                    "city": "San Francisco"
-                },
-                "metadata": {}
+                "geo": {"country": "US", "region": "CA", "city": "San Francisco"},
+                "metadata": {},
             },
             "payment": {
                 "method": "card",
-                "modality": {
-                    "type": "immediate",
-                    "description": "One-time payment"
-                },
+                "modality": {"type": "immediate", "description": "One-time payment"},
                 "auth_requirements": ["cvv"],
-                "metadata": {
-                    "card_type": "visa",
-                    "bin": "411111"
-                }
+                "metadata": {"card_type": "visa", "bin": "411111"},
             },
             "decision": {
                 "result": "APPROVE",
                 "risk_score": 0.15,
                 "reasons": ["low_risk_profile", "verified_user"],
                 "actions": ["process_payment"],
-                "meta": {
-                    "rules_triggered": ["rule_low_risk_score"],
-                    "model_version": "v1.0.0"
-                }
+                "meta": {"rules_triggered": ["rule_low_risk_score"], "model_version": "v1.0.0"},
             },
-            "signing": {
-                "vc_proof": None,
-                "receipt_hash": "sha256:mock_receipt_hash"
-            }
-        }
+            "signing": {"vc_proof": None, "receipt_hash": "sha256:mock_receipt_hash"},
+        },
     }
 
 
@@ -125,9 +101,9 @@ def sample_explanation_event():
                 "reason": "Low risk profile with verified user identity",
                 "key_signals": ["low_velocity", "verified_kyc", "familiar_merchant"],
                 "mitigation": "Continue monitoring for unusual patterns",
-                "confidence": 0.85
-            }
-        }
+                "confidence": 0.85,
+            },
+        },
     }
 
 
@@ -190,7 +166,7 @@ class TestCloudEventSubmission:
             "source": "https://orca.ocn.ai/v1",
             "type": "ocn.orca.decision.v1",
             "time": "2024-01-21T12:00:00Z",
-            "data": {"test": "data"}
+            "data": {"test": "data"},
         }
 
         response = client.post("/events", json=event)
@@ -207,7 +183,7 @@ class TestCloudEventSubmission:
             "source": "https://orca.ocn.ai/v1",
             "type": "ocn.unknown.event.v1",  # Not in allowed types
             "time": "2024-01-21T12:00:00Z",
-            "data": {"test": "data"}
+            "data": {"test": "data"},
         }
 
         response = client.post("/events", json=event)

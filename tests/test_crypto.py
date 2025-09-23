@@ -2,7 +2,6 @@
 Tests for crypto module.
 """
 
-
 from weave.crypto import VCStubs, hash_payload, verify_hash
 
 
@@ -86,7 +85,7 @@ class TestVCStubs:
         receipt_data = {
             "receipt_id": "receipt_123",
             "trace_id": "trace_456",
-            "event_hash": "sha256:abc123"
+            "event_hash": "sha256:abc123",
         }
 
         signed_receipt = VCStubs.sign_receipt(receipt_data)
@@ -115,20 +114,14 @@ class TestVCStubs:
         """Test receipt verification with valid proof."""
         receipt_data = {
             "receipt_id": "receipt_123",
-            "vc_proof": {
-                "type": "EcdsaSecp256k1Signature2019",
-                "created": "2024-01-21T12:00:00Z"
-            }
+            "vc_proof": {"type": "EcdsaSecp256k1Signature2019", "created": "2024-01-21T12:00:00Z"},
         }
 
         assert VCStubs.verify_receipt(receipt_data) is True
 
     def test_verify_receipt_with_public_key(self):
         """Test receipt verification with public key parameter."""
-        receipt_data = {
-            "receipt_id": "receipt_123",
-            "vc_proof": {"type": "mock"}
-        }
+        receipt_data = {"receipt_id": "receipt_123", "vc_proof": {"type": "mock"}}
 
         assert VCStubs.verify_receipt(receipt_data, "mock_public_key") is True
 

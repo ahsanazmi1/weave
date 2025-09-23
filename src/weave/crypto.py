@@ -18,10 +18,10 @@ def hash_payload(payload: Dict[str, Any]) -> str:
         SHA-256 hash as hex string with 'sha256:' prefix
     """
     # Convert to JSON string with sorted keys for consistent hashing
-    json_str = json.dumps(payload, sort_keys=True, separators=(',', ':'))
+    json_str = json.dumps(payload, sort_keys=True, separators=(",", ":"))
 
     # Generate SHA-256 hash
-    hash_obj = hashlib.sha256(json_str.encode('utf-8'))
+    hash_obj = hashlib.sha256(json_str.encode("utf-8"))
     hash_hex = hash_obj.hexdigest()
 
     return f"sha256:{hash_hex}"
@@ -39,7 +39,7 @@ def verify_hash(payload: Dict[str, Any], expected_hash: str) -> bool:
         True if the payload hash matches the expected hash
     """
     # Remove 'sha256:' prefix if present
-    if expected_hash.startswith('sha256:'):
+    if expected_hash.startswith("sha256:"):
         expected_hash = expected_hash[7:]
 
     # Generate hash for the payload
@@ -54,7 +54,9 @@ class VCStubs:
     """Stub implementations for Verifiable Credential operations."""
 
     @staticmethod
-    def sign_receipt(receipt_data: Dict[str, Any], private_key: Optional[str] = None) -> Dict[str, Any]:
+    def sign_receipt(
+        receipt_data: Dict[str, Any], private_key: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
         Sign a receipt with a Verifiable Credential proof (stub).
 
@@ -75,13 +77,10 @@ class VCStubs:
             "created": "2024-01-21T12:00:00Z",
             "proofPurpose": "assertionMethod",
             "verificationMethod": "did:weave:key#mock-key-id",
-            "jws": "mock-jws-signature-stub"
+            "jws": "mock-jws-signature-stub",
         }
 
-        return {
-            **receipt_data,
-            "vc_proof": proof
-        }
+        return {**receipt_data, "vc_proof": proof}
 
     @staticmethod
     def verify_receipt(receipt_data: Dict[str, Any], public_key: Optional[str] = None) -> bool:

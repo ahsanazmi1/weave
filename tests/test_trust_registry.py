@@ -5,13 +5,10 @@ Tests for trust registry functionality.
 import json
 import os
 import tempfile
-from pathlib import Path
-from unittest.mock import patch
 
-import pytest
 import yaml
 
-from weave.trust_registry import TrustRegistry, TrustRegistryError, get_trust_registry, reset_trust_registry
+from weave.trust_registry import TrustRegistry, get_trust_registry, reset_trust_registry
 from weave.settings import Settings
 
 
@@ -101,25 +98,14 @@ class TestTrustRegistryFileLoading:
         """Test loading trust registry from YAML file."""
         # Create temporary YAML file
         yaml_data = {
-            "metadata": {
-                "version": "v0.1.0",
-                "description": "Test registry"
-            },
+            "metadata": {"version": "v0.1.0", "description": "Test registry"},
             "providers": [
-                {
-                    "id": "test-provider-1",
-                    "name": "Test Provider 1",
-                    "status": "active"
-                },
-                {
-                    "id": "test-provider-2",
-                    "name": "Test Provider 2",
-                    "status": "inactive"
-                }
-            ]
+                {"id": "test-provider-1", "name": "Test Provider 1", "status": "active"},
+                {"id": "test-provider-2", "name": "Test Provider 2", "status": "inactive"},
+            ],
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump(yaml_data, f)
             temp_path = f.name
 
@@ -145,20 +131,11 @@ class TestTrustRegistryFileLoading:
         """Test loading trust registry from JSON file."""
         # Create temporary JSON file
         json_data = {
-            "metadata": {
-                "version": "v0.1.0",
-                "description": "Test registry"
-            },
-            "providers": [
-                {
-                    "id": "json-provider-1",
-                    "name": "JSON Provider 1",
-                    "status": "active"
-                }
-            ]
+            "metadata": {"version": "v0.1.0", "description": "Test registry"},
+            "providers": [{"id": "json-provider-1", "name": "JSON Provider 1", "status": "active"}],
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(json_data, f)
             temp_path = f.name
 
@@ -184,7 +161,7 @@ class TestTrustRegistryFileLoading:
 
     def test_load_invalid_yaml(self):
         """Test loading invalid YAML falls back to default."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             f.write("invalid: yaml: content: [")
             temp_path = f.name
 
@@ -200,7 +177,7 @@ class TestTrustRegistryFileLoading:
 
     def test_load_invalid_structure(self):
         """Test loading file with invalid structure falls back to default."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump({"invalid": "structure"}, f)
             temp_path = f.name
 
@@ -216,7 +193,7 @@ class TestTrustRegistryFileLoading:
 
     def test_load_unsupported_format(self):
         """Test loading unsupported file format falls back to default."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write("not yaml or json")
             temp_path = f.name
 
@@ -243,7 +220,7 @@ class TestTrustRegistryValidation:
             # Missing "providers" key
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump(invalid_data, f)
             temp_path = f.name
 
@@ -261,12 +238,9 @@ class TestTrustRegistryValidation:
 
     def test_validate_providers_not_list(self):
         """Test validation falls back to default when providers is not a list."""
-        invalid_data = {
-            "metadata": {"version": "v0.1.0"},
-            "providers": "not a list"
-        }
+        invalid_data = {"metadata": {"version": "v0.1.0"}, "providers": "not a list"}
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump(invalid_data, f)
             temp_path = f.name
 
@@ -291,10 +265,10 @@ class TestTrustRegistryValidation:
                     "id": "test-provider",
                     # Missing "name" and "status"
                 }
-            ]
+            ],
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump(invalid_data, f)
             temp_path = f.name
 
@@ -315,15 +289,11 @@ class TestTrustRegistryValidation:
         invalid_data = {
             "metadata": {"version": "v0.1.0"},
             "providers": [
-                {
-                    "id": "test-provider",
-                    "name": "Test Provider",
-                    "status": "invalid_status"
-                }
-            ]
+                {"id": "test-provider", "name": "Test Provider", "status": "invalid_status"}
+            ],
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump(invalid_data, f)
             temp_path = f.name
 
@@ -349,15 +319,11 @@ class TestTrustRegistryReload:
         initial_data = {
             "metadata": {"version": "v0.1.0"},
             "providers": [
-                {
-                    "id": "initial-provider",
-                    "name": "Initial Provider",
-                    "status": "active"
-                }
-            ]
+                {"id": "initial-provider", "name": "Initial Provider", "status": "active"}
+            ],
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             yaml.dump(initial_data, f)
             temp_path = f.name
 
@@ -372,15 +338,11 @@ class TestTrustRegistryReload:
             updated_data = {
                 "metadata": {"version": "v0.2.0"},
                 "providers": [
-                    {
-                        "id": "updated-provider",
-                        "name": "Updated Provider",
-                        "status": "active"
-                    }
-                ]
+                    {"id": "updated-provider", "name": "Updated Provider", "status": "active"}
+                ],
             }
 
-            with open(temp_path, 'w') as f:
+            with open(temp_path, "w") as f:
                 yaml.dump(updated_data, f)
 
             # Reload registry

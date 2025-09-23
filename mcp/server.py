@@ -4,16 +4,21 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+
 class MCPRequest(BaseModel):
     """MCP request model."""
+
     verb: str
     args: Dict[str, Any] = {}
 
+
 class MCPResponse(BaseModel):
     """MCP response model."""
+
     ok: bool
     data: Any = None
     error: Any = None
+
 
 @router.post("/mcp/invoke", response_model=MCPResponse)
 async def invoke_mcp_verb(request: MCPRequest) -> MCPResponse:
@@ -34,8 +39,8 @@ async def invoke_mcp_verb(request: MCPRequest) -> MCPResponse:
                 data={
                     "agent": "weave",
                     "receipts": [],
-                    "description": "Deterministic stub receipt list - empty as specified for Weave agent"
-                }
+                    "description": "Deterministic stub receipt list - empty as specified for Weave agent",
+                },
             )
         else:
             return MCPResponse(ok=False, error=f"Unsupported verb: {request.verb}")

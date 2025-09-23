@@ -6,7 +6,6 @@ against an allowlist to ensure only trusted providers can submit receipts.
 """
 
 import json
-import os
 import yaml
 from pathlib import Path
 from typing import Dict, List, Optional, Union
@@ -16,6 +15,7 @@ from .settings import Settings
 
 class TrustRegistryError(Exception):
     """Raised when trust registry operations fail."""
+
     pass
 
 
@@ -37,7 +37,7 @@ class TrustRegistry:
                 "type": "decision_engine",
                 "status": "active",
                 "trust_level": "high",
-                "version": "1.0.0"
+                "version": "1.0.0",
             },
             {
                 "id": "ocn-weave-v1",
@@ -46,7 +46,7 @@ class TrustRegistry:
                 "type": "receipt_store",
                 "status": "active",
                 "trust_level": "high",
-                "version": "1.0.0"
+                "version": "1.0.0",
             },
             {
                 "id": "ocn-okra-v1",
@@ -55,7 +55,7 @@ class TrustRegistry:
                 "type": "credit_agent",
                 "status": "active",
                 "trust_level": "medium",
-                "version": "1.0.0"
+                "version": "1.0.0",
             },
             {
                 "id": "ocn-opal-v1",
@@ -64,7 +64,7 @@ class TrustRegistry:
                 "type": "wallet_agent",
                 "status": "active",
                 "trust_level": "medium",
-                "version": "1.0.0"
+                "version": "1.0.0",
             },
             {
                 "id": "test-provider",
@@ -73,15 +73,15 @@ class TrustRegistry:
                 "type": "test",
                 "status": "active",
                 "trust_level": "low",
-                "version": "0.1.0"
-            }
+                "version": "0.1.0",
+            },
         ],
         "metadata": {
             "version": "v0.1.0",
             "created": "2024-01-01T00:00:00Z",
             "description": "OCN Trust Registry v0 - Credential Provider Allowlist",
-            "schema_version": "1.0"
-        }
+            "schema_version": "1.0",
+        },
     }
 
     def __init__(self, settings: Optional[Settings] = None):
@@ -107,14 +107,16 @@ class TrustRegistry:
                     raise TrustRegistryError(f"Trust registry file not found: {allowlist_path}")
 
                 # Load based on file extension
-                if allowlist_path.suffix.lower() in ['.yaml', '.yml']:
-                    with open(allowlist_path, 'r', encoding='utf-8') as f:
+                if allowlist_path.suffix.lower() in [".yaml", ".yml"]:
+                    with open(allowlist_path, "r", encoding="utf-8") as f:
                         self._allowlist = yaml.safe_load(f)
-                elif allowlist_path.suffix.lower() == '.json':
-                    with open(allowlist_path, 'r', encoding='utf-8') as f:
+                elif allowlist_path.suffix.lower() == ".json":
+                    with open(allowlist_path, "r", encoding="utf-8") as f:
                         self._allowlist = json.load(f)
                 else:
-                    raise TrustRegistryError(f"Unsupported trust registry file format: {allowlist_path.suffix}")
+                    raise TrustRegistryError(
+                        f"Unsupported trust registry file format: {allowlist_path.suffix}"
+                    )
 
                 # Validate loaded allowlist
                 self._validate_allowlist()
@@ -127,7 +129,9 @@ class TrustRegistry:
 
         except Exception as e:
             # Fallback to default on any error
-            print(f"Warning: Failed to load trust registry from {self.settings.trust_registry_path}: {e}")
+            print(
+                f"Warning: Failed to load trust registry from {self.settings.trust_registry_path}: {e}"
+            )
             print("Falling back to default embedded allowlist")
             self._allowlist = self.DEFAULT_ALLOWLIST.copy()
             self._source = "embedded"
@@ -157,10 +161,14 @@ class TrustRegistry:
             required_fields = ["id", "name", "status"]
             for field in required_fields:
                 if field not in provider:
-                    raise TrustRegistryError(f"Provider at index {i} missing required field: {field}")
+                    raise TrustRegistryError(
+                        f"Provider at index {i} missing required field: {field}"
+                    )
 
             if provider["status"] not in ["active", "inactive", "suspended"]:
-                raise TrustRegistryError(f"Provider at index {i} has invalid status: {provider['status']}")
+                raise TrustRegistryError(
+                    f"Provider at index {i} has invalid status: {provider['status']}"
+                )
 
     def is_allowed(self, provider_id: str) -> bool:
         """
@@ -229,16 +237,10 @@ class TrustRegistry:
         stats = {
             "total_providers": len(providers),
             "active_providers": len(self._provider_ids),
-            "inactive_providers": len([
-                p for p in providers
-                if p.get("status") == "inactive"
-            ]),
-            "suspended_providers": len([
-                p for p in providers
-                if p.get("status") == "suspended"
-            ]),
+            "inactive_providers": len([p for p in providers if p.get("status") == "inactive"]),
+            "suspended_providers": len([p for p in providers if p.get("status") == "suspended"]),
             "registry_version": self._allowlist.get("metadata", {}).get("version", "unknown"),
-            "source": self._source
+            "source": self._source,
         }
 
         return stats
