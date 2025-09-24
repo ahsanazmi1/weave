@@ -8,7 +8,7 @@ against an allowlist to ensure only trusted providers can submit receipts.
 import json
 import yaml
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from .settings import Settings
 
@@ -92,7 +92,7 @@ class TrustRegistry:
             settings: Settings instance for configuration
         """
         self.settings = settings or Settings()
-        self._allowlist: Dict = {}
+        self._allowlist: Dict[str, Any] = {}
         self._provider_ids: List[str] = []
         self._source: str = "embedded"
         self._load_allowlist()
@@ -138,9 +138,9 @@ class TrustRegistry:
 
         # Build provider ID list for quick lookup
         self._provider_ids = [
-            provider["id"]
-            for provider in self._allowlist.get("providers", [])
-            if provider.get("status") == "active"
+            provider["id"]  # type: ignore[index]
+            for provider in self._allowlist.get("providers", [])  # type: ignore[union-attr]
+            if provider.get("status") == "active"  # type: ignore[union-attr]
         ]
 
     def _validate_allowlist(self) -> None:

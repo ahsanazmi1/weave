@@ -11,7 +11,7 @@ This module provides:
 import json
 import logging
 import re
-from typing import Any, Dict, Optional
+from typing import Any, List, Optional
 
 from ocn_common.trace import get_current_trace_id
 
@@ -57,7 +57,7 @@ class RedactionFilter(logging.Filter):
             # and the args contain digits that could be CVVs
             msg_str = str(record.msg).lower()
             if "cvv" in msg_str and record.args:
-                new_args = []
+                new_args: List[object] = []
                 for arg in record.args:
                     if isinstance(arg, str) and arg.isdigit() and len(arg) in [3, 4]:
                         # This could be a CVV, redact it
@@ -167,7 +167,7 @@ class TraceLoggerAdapter(logging.LoggerAdapter):
         super().__init__(logger, {})
         self.trace_id = trace_id
 
-    def process(self, msg: Any, kwargs: Dict[str, Any]) -> tuple:
+    def process(self, msg: Any, kwargs: Any) -> tuple:
         """Process log message to include trace_id."""
         # Get trace_id from current context if not provided
         if not self.trace_id:
@@ -203,7 +203,7 @@ def setup_logging(level: str = "INFO", format_type: str = "json") -> None:
 
     # Set formatter
     if format_type.lower() == "json":
-        formatter = JSONFormatter()
+        formatter: logging.Formatter = JSONFormatter()
     else:
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 

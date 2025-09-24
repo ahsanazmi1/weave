@@ -18,7 +18,7 @@ from .settings import settings
 Base = declarative_base()
 
 
-class Receipt(Base):
+class Receipt(Base):  # type: ignore[valid-type,misc]
     """SQLAlchemy model for receipt storage."""
 
     __tablename__ = "receipts"
@@ -122,7 +122,7 @@ class InMemoryStorage(StorageBackend):
 class SQLiteStorage(StorageBackend):
     """SQLite storage backend for persistent storage."""
 
-    def __init__(self, database_url: str = None):
+    def __init__(self, database_url: Optional[str] = None):
         if database_url is None:
             database_url = settings.database_url
 
@@ -210,7 +210,7 @@ class SQLiteStorage(StorageBackend):
         }
 
         if receipt.receipt_metadata:
-            result["metadata"] = json.loads(receipt.receipt_metadata)
+            result["metadata"] = json.loads(receipt.receipt_metadata)  # type: ignore[arg-type]
         else:
             result["metadata"] = None
 
