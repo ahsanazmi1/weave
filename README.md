@@ -6,6 +6,15 @@
 
 **Weave** is the **open, transparent receipt ledger** for the [Open Checkout Network (OCN)](https://github.com/ocn-ai/ocn-common).
 
+## Phase 2 — Explainability
+
+🚧 **Currently in development** - Phase 2 focuses on AI-powered explainability and human-readable audit reasoning.
+
+- **Status**: Active development on `phase-2-explainability` branch
+- **Features**: LLM integration, explainability API endpoints, decision audit trails
+- **Issue Tracker**: [Phase 2 Issues](https://github.com/ahsanazmi1/weave/issues?q=is%3Aopen+is%3Aissue+label%3Aphase-2)
+- **Timeline**: Weeks 4-8 of OCN development roadmap
+
 ## Purpose
 
 Weave provides immutable receipt storage and retrieval for the OCN ecosystem. Unlike traditional closed receipt systems, Weave offers:
