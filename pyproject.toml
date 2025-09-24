@@ -12,7 +12,8 @@ dependencies = [
     "pydantic>=2.5.0",
     "pydantic-settings>=2.0.0",
     "python-multipart>=0.0.6",
-    "pyyaml>=6.0"
+    "pyyaml>=6.0",
+    "ocn-common @ git+https://github.com/ahsanazmi1/ocn-common.git@main#egg=ocn-common"
 ]
 
 [project.optional-dependencies]
