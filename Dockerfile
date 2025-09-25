@@ -2,7 +2,7 @@
 # Production-ready container for CloudEvents subscriber and receipt management
 
 # Build stage
-FROM python:3.11-slim AS builder
+FROM python:3.12-slim AS builder
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -27,7 +27,7 @@ COPY pyproject.toml ./
 RUN uv pip install --system -e .
 
 # Production stage
-FROM python:3.11-slim AS production
+FROM python:3.12-slim AS production
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
