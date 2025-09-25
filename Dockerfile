@@ -55,6 +55,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code
 COPY src/ ./src/
+COPY mcp/ ./mcp/
 
 # Create data directory for receipts database
 RUN mkdir -p data && chmod 755 data
