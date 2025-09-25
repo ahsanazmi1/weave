@@ -20,7 +20,7 @@ import sys
 import os
 
 # Add the project root to the path to import our simplified MCP server
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 from mcp.server import router as mcp_router
 
 # Set up structured logging with redaction
