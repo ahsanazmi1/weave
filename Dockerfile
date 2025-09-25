@@ -24,7 +24,7 @@ RUN pip install uv
 WORKDIR /app
 
 # Copy requirements and install Python dependencies
-COPY pyproject.toml ./
+COPY pyproject.toml README.md ./
 RUN uv pip install --system -e .
 
 # Production stage
