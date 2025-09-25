@@ -1,6 +1,6 @@
 [project]
 name = "weave"
-version = "0.1.0"
+version = "0.2.0"
 description = "OCN weave"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -13,7 +13,7 @@ dependencies = [
     "pydantic-settings>=2.0.0",
     "python-multipart>=0.0.6",
     "pyyaml>=6.0",
-    "ocn-common @ git+https://github.com/ahsanazmi1/ocn-common.git@main#egg=ocn-common"
+    "ocn-common @ git+https://github.com/ahsanazmi1/ocn-common.git@v0.2.0#egg=ocn-common"
 ]
 
 [project.optional-dependencies]
