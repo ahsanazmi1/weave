@@ -90,6 +90,16 @@ logger.info("Processing receipt for user@example.com with card ending in 1111")
 }
 ```
 
+## Phase 3 — Negotiation & Live Fee Bidding
+
+Bid broadcast/aggregation + audit.
+
+### Phase 3 — Negotiation & Live Fee Bidding
+- [ ] Broadcasts bid requests to processors (Carat, Adyen, Stripe)
+- [ ] Aggregates bid responses (bps, rebates, settlement) into shared trace
+- [ ] Logs bidding rounds; emits bid request/response events
+- [ ] Tests for bidding + aggregation workflows
+
 ## Related OCN Repositories
 
 - [Orca](https://github.com/ocn-ai/orca): The Open Checkout Agent
