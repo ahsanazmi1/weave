@@ -92,13 +92,80 @@ logger.info("Processing receipt for user@example.com with card ending in 1111")
 
 ## Phase 3 — Negotiation & Live Fee Bidding
 
-Bid broadcast/aggregation + audit.
+Processor auction system with bid broadcast, aggregation, and audit capabilities.
 
 ### Phase 3 — Negotiation & Live Fee Bidding
-- [ ] Broadcasts bid requests to processors (Carat, Adyen, Stripe)
-- [ ] Aggregates bid responses (bps, rebates, settlement) into shared trace
-- [ ] Logs bidding rounds; emits bid request/response events
-- [ ] Tests for bidding + aggregation workflows
+- [x] **Broadcasts bid requests to processors** (Carat, Adyen, Stripe)
+- [x] **Aggregates bid responses** (bps, rebates, settlement) into shared trace
+- [x] **Logs bidding rounds**; emits bid request/response events
+- [x] **Tests for bidding + aggregation workflows**
+
+### Auction Features
+- **Processor Connectors**: Stub implementations for Carat, Adyen, Stripe
+- **Bid Aggregation**: Automatic winner determination with tie-breaker logic
+- **CloudEvent Emission**: Emits `ocn.weave.bid_request.v1` and `ocn.weave.bid_response.v1` events
+- **LLM Summaries**: Optional LLM-powered auction result explanations
+- **Deterministic Results**: Consistent auction outcomes with configurable seeds
+
+### Auction API Endpoints
+- `POST /auction/run` - Run processor auction for pay-ins (checkout)
+- `GET /auction/status` - Get auction service status and capabilities
+- `GET /auction/sample-request` - Get sample auction request for testing
+
+### MCP Auction Verb
+- `runAuction` - Run processor auction via Model Context Protocol
+
+#### Auction Request Example
+```bash
+curl -X POST http://localhost:8000/auction/run \
+  -H "Content-Type: application/json" \
+  -d '{
+    "trace_id": "auction-trace-001",
+    "cart_summary": {
+      "total_amount": 100.0,
+      "currency": "USD",
+      "item_count": 2,
+      "merchant_id": "merchant_001",
+      "merchant_category": "general",
+      "channel": "online"
+    },
+    "rail_candidates": [
+      {
+        "rail_type": "credit",
+        "base_cost_bps": 150.0,
+        "settlement_days": 1,
+        "risk_score": 0.3
+      }
+    ]
+  }'
+```
+
+#### Auction Response Example
+```json
+{
+  "trace_id": "auction-trace-001",
+  "auction_id": "auction-auction-trace-001-1234567890",
+  "winning_processor": "stripe",
+  "winning_bid": {
+    "processor_id": "stripe",
+    "bps": 150.0,
+    "rebate_bps": 10.0,
+    "effective_cost_bps": 140.0,
+    "expected_settlement_days": 1,
+    "confidence": 0.9,
+    "constraints": {
+      "min_amount": 0.50,
+      "max_amount": 100000.0,
+      "supported_currencies": ["USD", "EUR", "GBP"]
+    }
+  },
+  "all_bids": [...],
+  "effective_cost_bps": 140.0,
+  "summary": "Stripe won the auction with 140.0 bps effective cost (150.0 bps - 10.0 bps rebate) and 1-day settlement (saving 5.0 bps vs runner-up) from 3 competing processors.",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "llm_configured": true
+}
+```
 
 ## Related OCN Repositories
 

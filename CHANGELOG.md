@@ -3,9 +3,28 @@
 All notable changes to this project will be documented in this file.
 
 ## v0.3.0 — Phase 3: Negotiation & Live Fee Bidding
-- New branch: phase-3-bidding
-- Prep for negotiation, bidding, policy DSL, and processor connectors
-- README updated with Phase 3 checklist
+
+### Added
+- **Processor Auction System**: Complete auction management for Carat, Adyen, Stripe
+- **Bid Request Broadcasting**: Emits `ocn.weave.bid_request.v1` to processor connectors
+- **Bid Response Aggregation**: Collects and aggregates `ocn.weave.bid_response.v1` payloads
+- **Winner Determination**: Automatic selection with tie-breaker logic (cost, settlement, confidence)
+- **CloudEvent Emission**: Comprehensive event logging for audit trails
+- **LLM Summaries**: Optional LLM-powered auction result explanations
+- **MCP Integration**: `runAuction` verb for Model Context Protocol
+- **API Endpoints**: 
+  - `POST /auction/run` - Run processor auction for pay-ins
+  - `GET /auction/status` - Service status and capabilities
+  - `GET /auction/sample-request` - Sample auction request for testing
+- **Deterministic Results**: Consistent auction outcomes with configurable seeds
+- **Comprehensive Tests**: 30+ test cases covering aggregation, tie-breakers, and CloudEvents
+
+### Features
+- Processor connector stubs with realistic pricing models
+- Effective cost calculation (bps - rebate_bps) with aggregation
+- Tie-breaker logic: cost → settlement days → confidence
+- CloudEvent validation and JSON schema
+- Integration with existing structured logging and receipt storage
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

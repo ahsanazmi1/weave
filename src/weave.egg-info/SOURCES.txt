@@ -2,6 +2,9 @@ LICENSE
 README.md
 pyproject.toml
 src/weave/__init__.py
+src/weave/api.py
+src/weave/auction.py
+src/weave/auction_events.py
 src/weave/crypto.py
 src/weave/logging_setup.py
 src/weave/settings.py
@@ -13,6 +16,9 @@ src/weave.egg-info/SOURCES.txt
 src/weave.egg-info/dependency_links.txt
 src/weave.egg-info/requires.txt
 src/weave.egg-info/top_level.txt
+src/weave/llm/__init__.py
+src/weave/llm/explain.py
+tests/test_auction.py
 tests/test_crypto.py
 tests/test_mcp_smoke.py
 tests/test_store.py
