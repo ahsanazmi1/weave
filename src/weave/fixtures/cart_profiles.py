@@ -319,3 +319,4 @@ def get_expected_winners() -> Dict[str, str]:
         name: profile["expected_winner"]
         for name, profile in profiles.items()
     }
+

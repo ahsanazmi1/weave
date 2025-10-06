@@ -192,3 +192,4 @@ class BaseProcessorConnector(ABC):
         except Exception as e:
             self.logger.error(f"Volume discount calculation failed: {e}")
             return 1.0
+

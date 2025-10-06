@@ -1,0 +1,101 @@
+{
+  "scorecard_id": "scorecard-2024-01-15",
+  "date": "2024-01-15T00:00:00Z",
+  "total_transactions": 1250,
+  "total_amount": 125000.50,
+  "avg_success_rate": 0.942,
+  "avg_settlement_time": 28.5,
+  "variants": [
+    {
+      "variant_id": "stripe_ach_rebate",
+      "processor_id": "stripe",
+      "rail_type": "ACH",
+      "reward_type": "rebate",
+      "reward_value": 1250.00,
+      "transaction_count": 500,
+      "total_amount": 50000.00,
+      "success_rate": 0.96,
+      "avg_settlement_time": 24.0
+    },
+    {
+      "variant_id": "adyen_ach_discount",
+      "processor_id": "adyen",
+      "rail_type": "ACH",
+      "reward_type": "discount",
+      "reward_value": 875.00,
+      "transaction_count": 350,
+      "total_amount": 35000.00,
+      "success_rate": 0.94,
+      "avg_settlement_time": 36.0
+    },
+    {
+      "variant_id": "carat_ach_standard",
+      "processor_id": "carat",
+      "rail_type": "ACH",
+      "reward_type": "standard",
+      "reward_value": 625.25,
+      "transaction_count": 400,
+      "total_amount": 40050.50,
+      "success_rate": 0.93,
+      "avg_settlement_time": 25.5
+    }
+  ],
+  "top_processor": "stripe",
+  "top_rail": "ACH",
+  "best_reward_type": "rebate",
+  "markdown_report": "# Weave Scorecard - 2024-01-15\n\n## Executive Summary\n\n- **Total Transactions**: 1,250\n- **Total Amount**: $125,000.50\n- **Average Success Rate**: 94.20%\n- **Average Settlement Time**: 28.5 hours\n\n## Top Performers\n\n- **Best Processor**: stripe\n- **Best Rail Type**: ACH\n- **Best Reward Type**: rebate\n\n## Variant Performance\n\n| Variant ID | Processor | Rail | Reward Type | Transactions | Amount | Success Rate | Avg Settlement |\n|------------|-----------|------|-------------|--------------|--------|--------------|----------------|\n| stripe_ach_rebate | stripe | ACH | rebate | 500 | $50,000.00 | 96.00% | 24.0h |\n| adyen_ach_discount | adyen | ACH | discount | 350 | $35,000.00 | 94.00% | 36.0h |\n| carat_ach_standard | carat | ACH | standard | 400 | $40,050.50 | 93.00% | 25.5h |\n\n## Insights\n\n- 3 variants above average success rate\n- 2 variants with faster settlement than average\n- 3 variants providing rewards\n\n---\n*Generated on 2024-01-15 10:30:00 UTC*",
+  "json_data": {
+    "scorecard_date": "2024-01-15T00:00:00Z",
+    "generated_at": "2024-01-15T10:30:00Z",
+    "variants": [
+      {
+        "variant_id": "stripe_ach_rebate",
+        "processor_id": "stripe",
+        "rail_type": "ACH",
+        "reward_type": "rebate",
+        "reward_value": 1250.0,
+        "transaction_count": 500,
+        "total_amount": 50000.0,
+        "success_rate": 0.96,
+        "avg_settlement_time": 24.0
+      },
+      {
+        "variant_id": "adyen_ach_discount",
+        "processor_id": "adyen",
+        "rail_type": "ACH",
+        "reward_type": "discount",
+        "reward_value": 875.0,
+        "transaction_count": 350,
+        "total_amount": 35000.0,
+        "success_rate": 0.94,
+        "avg_settlement_time": 36.0
+      },
+      {
+        "variant_id": "carat_ach_standard",
+        "processor_id": "carat",
+        "rail_type": "ACH",
+        "reward_type": "standard",
+        "reward_value": 625.25,
+        "transaction_count": 400,
+        "total_amount": 40050.5,
+        "success_rate": 0.93,
+        "avg_settlement_time": 25.5
+      }
+    ],
+    "summary": {
+      "total_variants": 3,
+      "unique_processors": 3,
+      "unique_rails": 1,
+      "unique_reward_types": 3
+    }
+  },
+  "created_at": "2024-01-15T10:30:00Z"
+}
+
+
+
+
+
+
+
+

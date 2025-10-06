@@ -1,0 +1,37 @@
+{
+  "breach_id": "breach-critical-001",
+  "trace_id": "system-wide",
+  "guardrail_type": "approval_rate",
+  "metric": {
+    "metric_id": "metric-approval-rate-001",
+    "metric_type": "approval_rate",
+    "baseline_value": 0.95,
+    "baseline_date": "2023-12-15T00:00:00Z",
+    "baseline_sample_size": 10000,
+    "current_value": 0.82,
+    "current_date": "2024-01-15T00:00:00Z",
+    "current_sample_size": 1000,
+    "drift_score": 0.28,
+    "drift_threshold": 0.15,
+    "drift_detected": true,
+    "severity": "critical",
+    "created_at": "2024-01-15T10:35:00Z"
+  },
+  "breach_severity": "critical",
+  "breach_description": "Approval rate guardrail breached: 82% approval rate is below 95% threshold. Significant drift detected with PSI score 0.28 > 0.15 threshold.",
+  "rollback_triggered": true,
+  "rollback_pr_url": "https://github.com/ocn-demo/orca/pull/rollback-a1b2c3d4",
+  "rollback_status": "created",
+  "resolved": false,
+  "resolution_notes": null,
+  "created_at": "2024-01-15T10:35:00Z",
+  "resolved_at": null
+}
+
+
+
+
+
+
+
+

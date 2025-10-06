@@ -169,3 +169,4 @@ class StripeConnector(BaseProcessorConnector):
             'min_amount': 0.50,
             'max_amount': 100000.0
         }
+

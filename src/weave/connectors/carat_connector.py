@@ -180,3 +180,4 @@ class CaratConnector(BaseProcessorConnector):
             'min_amount': 10.0,
             'max_amount': 1000000.0
         }
+

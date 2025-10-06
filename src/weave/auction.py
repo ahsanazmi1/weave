@@ -16,7 +16,7 @@ import numpy as np
 from weave.models import CartSummary, RailCandidate, BidRequest, BidResponse, AuctionResult
 from weave.auction_events import emit_bid_request_event, emit_bid_response_event
 from weave.llm.explain import explain_auction_result_llm, is_auction_llm_configured
-from weave.connectors import get_connector_registry
+from weave.connectors.connector_registry import get_connector_registry
 
 logger = logging.getLogger(__name__)
 

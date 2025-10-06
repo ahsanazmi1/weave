@@ -10,7 +10,14 @@ from pydantic import BaseModel, Field
 from weave.auction import run_auction
 from weave.models import CartSummary, RailCandidate
 from weave.llm.explain import is_auction_llm_configured
-from weave.mcp.server import router as mcp_router
+
+# Import ML-enhanced auction manager
+try:
+    from weave.ml_enhanced_auction import get_ml_enhanced_auction_manager
+    ML_AVAILABLE = True
+except ImportError as e:
+    print(f"⚠️ ML models not available: {e}")
+    ML_AVAILABLE = False
 
 # Create FastAPI application
 app = FastAPI(
@@ -28,8 +35,7 @@ app = FastAPI(
     },
 )
 
-# Include MCP router
-app.include_router(mcp_router)
+# MCP router not available in this version
 
 
 class AuctionRequest(BaseModel):
@@ -94,13 +100,21 @@ async def run_processor_auction(request: AuctionRequest) -> AuctionResponse:
         Auction result with winning processor and aggregated bids
     """
     try:
-        # Run auction
-        auction_result = run_auction(
-            trace_id=request.trace_id,
-            cart_summary=request.cart_summary,
-            rail_candidates=request.rail_candidates,
-            deterministic_seed=request.deterministic_seed
-        )
+        # Run auction (ML-enhanced if available)
+        if ML_AVAILABLE:
+            ml_manager = get_ml_enhanced_auction_manager()
+            auction_result = ml_manager.run_auction(
+                trace_id=request.trace_id,
+                cart_summary=request.cart_summary,
+                rail_candidates=request.rail_candidates
+            )
+        else:
+            auction_result = run_auction(
+                trace_id=request.trace_id,
+                cart_summary=request.cart_summary,
+                rail_candidates=request.rail_candidates,
+                deterministic_seed=request.deterministic_seed
+            )
         
         # Format winning bid
         winning_bid = {
@@ -163,6 +177,7 @@ async def get_auction_status() -> Dict[str, Any]:
             "bid_aggregation": True,
             "cloud_events": True,
             "llm_explanations": is_auction_llm_configured(),
+            "ml_enhancement": ML_AVAILABLE,
         },
         "processors": ["stripe", "adyen", "carat"],
         "supported_rails": ["ACH", "debit", "credit"],
@@ -173,6 +188,49 @@ async def get_auction_status() -> Dict[str, Any]:
             "event_emission": True,
         },
     }
+
+
+@app.get("/ml/status")
+async def get_ml_status() -> Dict[str, Any]:
+    """Get ML model status and configuration."""
+    if not ML_AVAILABLE:
+        return {
+            "ml_enabled": False,
+            "error": "ML models not available"
+        }
+    
+    try:
+        from weave.ml.auction_optimization import get_auction_optimizer
+        from weave.ml.bid_prediction import get_bid_predictor
+        
+        auction_optimizer = get_auction_optimizer()
+        bid_predictor = get_bid_predictor()
+        
+        return {
+            "ml_enabled": True,
+            "ml_weight": 0.7,  # From MLEnhancedAuctionManager
+            "models": {
+                "auction_optimization": {
+                    "loaded": auction_optimizer.is_loaded,
+                    "model_type": auction_optimizer.metadata.get("model_type", "unknown"),
+                    "version": auction_optimizer.metadata.get("version", "unknown"),
+                    "training_date": auction_optimizer.metadata.get("trained_on", "unknown"),
+                    "features": len(auction_optimizer.feature_names) if auction_optimizer.feature_names else 0
+                },
+                "bid_prediction": {
+                    "loaded": bid_predictor.is_loaded,
+                    "model_type": bid_predictor.metadata.get("model_type", "unknown"),
+                    "version": bid_predictor.metadata.get("version", "unknown"),
+                    "training_date": bid_predictor.metadata.get("trained_on", "unknown"),
+                    "features": len(bid_predictor.feature_names) if bid_predictor.feature_names else 0
+                }
+            }
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get ML status: {str(e)}",
+        )
 
 
 @app.get("/auction/sample-request")

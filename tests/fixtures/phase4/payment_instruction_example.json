@@ -1,0 +1,66 @@
+{
+  "instruction_id": "inst-789",
+  "trace_id": "test-auction-flow-123",
+  "selected_rail": "ACH",
+  "selected_processor": "carat",
+  "selected_instrument": "bank_transfer",
+  "amount": 750.50,
+  "currency": "USD",
+  "effective_cost": 12.75,
+  "settlement_time_hours": 24,
+  "confidence": 0.88,
+  "explanation": "Selected Carat processor based on auction result: lowest effective cost (17.0 bps) with 1-day settlement time. Alternative processors considered: Stripe (23.0 bps), Adyen (28.5 bps).",
+  "alternatives": [
+    {
+      "processor": "stripe",
+      "cost": 23.0,
+      "confidence": 0.95,
+      "settlement_time": 24,
+      "reason": "Higher cost but higher confidence"
+    },
+    {
+      "processor": "adyen",
+      "cost": 28.5,
+      "confidence": 0.92,
+      "settlement_time": 48,
+      "reason": "Highest cost and longer settlement"
+    }
+  ],
+  "constraints_applied": [
+    {
+      "type": "auction_winner",
+      "processor": "carat",
+      "effective_cost_bps": 17.0
+    },
+    {
+      "type": "settlement_time",
+      "max_hours": 48,
+      "selected_hours": 24
+    },
+    {
+      "type": "confidence_threshold",
+      "min_confidence": 0.85,
+      "selected_confidence": 0.88
+    }
+  ],
+  "metadata": {
+    "auction_id": "auction-456",
+    "merchant_id": "merchant_retail_001",
+    "cart_item_count": 4,
+    "merchant_category": "retail",
+    "channel": "online",
+    "risk_assessment": {
+      "overall_risk": "low",
+      "fraud_risk": 0.05,
+      "chargeback_risk": 0.02
+    }
+  }
+}
+
+
+
+
+
+
+
+

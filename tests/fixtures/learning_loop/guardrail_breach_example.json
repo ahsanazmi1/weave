@@ -1,0 +1,106 @@
+{
+  "performance_data_breach": {
+    "approval_rate": 0.78,
+    "avg_cost": 85.0,
+    "avg_settlement_time": 72.0,
+    "chargeback_rate": 0.08,
+    "customer_satisfaction": 0.65
+  },
+  "performance_data_critical": {
+    "approval_rate": 0.87,
+    "avg_cost": 65.0,
+    "avg_settlement_time": 60.0,
+    "chargeback_rate": 0.04,
+    "customer_satisfaction": 0.75
+  },
+  "performance_data_warning": {
+    "approval_rate": 0.91,
+    "avg_cost": 55.0,
+    "avg_settlement_time": 50.0,
+    "chargeback_rate": 0.025,
+    "customer_satisfaction": 0.78
+  },
+  "performance_data_healthy": {
+    "approval_rate": 0.96,
+    "avg_cost": 35.0,
+    "avg_settlement_time": 36.0,
+    "chargeback_rate": 0.015,
+    "customer_satisfaction": 0.85
+  },
+  "expected_breach_result": {
+    "overall_status": "breach",
+    "breaches_detected": [
+      {
+        "metric": "approval_rate",
+        "current_value": 0.78,
+        "threshold": 0.80,
+        "severity": "breach",
+        "action_required": "immediate_rollback"
+      },
+      {
+        "metric": "avg_cost",
+        "current_value": 85.0,
+        "threshold": 100.0,
+        "severity": "breach",
+        "action_required": "immediate_rollback"
+      },
+      {
+        "metric": "chargeback_rate",
+        "current_value": 0.08,
+        "threshold": 0.10,
+        "severity": "breach",
+        "action_required": "immediate_rollback"
+      }
+    ],
+    "critical_alerts": [],
+    "warnings_detected": [
+      {
+        "metric": "avg_settlement_time",
+        "current_value": 72.0,
+        "threshold": 72.0,
+        "severity": "warning",
+        "action_required": "monitor_closely"
+      },
+      {
+        "metric": "customer_satisfaction",
+        "current_value": 0.65,
+        "threshold": 0.70,
+        "severity": "warning",
+        "action_required": "monitor_closely"
+      }
+    ]
+  },
+  "rollback_config_example": {
+    "rollback_id": "rollback_20240116_103000",
+    "trigger_reason": "guardrail_breach",
+    "rollback_scope": {
+      "scope_type": "full_policy_rollback",
+      "description": "Full policy rollback due to approval rate breach",
+      "affected_metrics": ["approval_rate", "avg_cost", "chargeback_rate"],
+      "rollback_severity": "breach"
+    },
+    "target_configuration": {
+      "DEFAULT_POLICY": "conservative",
+      "approval_threshold": 0.95,
+      "cost_threshold": 25.0,
+      "risk_threshold": 0.3,
+      "settlement_time_limit": 24.0
+    },
+    "validation_criteria": {
+      "approval_rate_threshold": 0.90,
+      "cost_threshold": 50.0,
+      "chargeback_rate_threshold": 0.02,
+      "settlement_time_threshold": 48.0,
+      "validation_period_hours": 24,
+      "success_criteria": "all_metrics_within_thresholds"
+    }
+  }
+}
+
+
+
+
+
+
+
+

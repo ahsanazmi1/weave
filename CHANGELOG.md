@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.4.0 — Phase 4: Payment Instruction & Visibility
+
+### 🚀 Phase 4 — Payment Instruction & Visibility
+
+This release initiates Phase 4 development, focusing on payment instruction generation, settlement visibility, and comprehensive payment tracking for receipt audit trails.
+
+#### Planned Features
+- **Payment Instruction Generation**: Generate standardized payment instructions for audit trails
+- **Settlement Visibility**: Real-time tracking and visibility into settlement processes
+- **Payment Tracking**: Comprehensive payment tracking across receipt workflows
+- **Instruction Validation**: Enhanced validation for payment instructions and settlement confirmations
+- **CloudEvents Integration**: New event types for payment instruction and settlement visibility
+
+#### Timeline
+- **Status**: Active development on `phase-4-instruction` branch
+- **Timeline**: Weeks 12-16 of OCN development roadmap
+- **Issue Tracker**: [Phase 4 Issues](https://github.com/ahsanazmi1/weave/issues?q=is%3Aopen+is%3Aissue+label%3Aphase-4)
+
 ## v0.3.0 — Phase 3: Negotiation & Live Fee Bidding
 
 ### Added

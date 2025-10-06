@@ -1,0 +1,32 @@
+{
+  "auth_id": "auth-abc123",
+  "processor_id": "carat",
+  "status": "approved",
+  "auth_code": "AUTH789XYZ",
+  "decline_reason": null,
+  "processor_fee": 12.75,
+  "settlement_time_actual": 22,
+  "processor_metadata": {
+    "instruction_id": "inst-789",
+    "rail_type": "ACH",
+    "instrument": "bank_transfer",
+    "merchant_id": "merchant_retail_001",
+    "processor_reference": "CAR-20240115-789",
+    "network_response": "APPROVED",
+    "network_response_code": "00",
+    "avs_result": "Y",
+    "cvv_result": "M",
+    "fraud_score": 12,
+    "risk_decision": "ACCEPT",
+    "processing_time_ms": 145
+  },
+  "timestamp": "2024-01-15T10:32:15Z"
+}
+
+
+
+
+
+
+
+

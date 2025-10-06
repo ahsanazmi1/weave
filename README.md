@@ -6,14 +6,174 @@
 
 **Weave** is the **open, transparent receipt ledger** for the [Open Checkout Network (OCN)](https://github.com/ocn-ai/ocn-common).
 
-## Phase 2 — Explainability
+## Phase 4 — Payment Instruction & Visibility
 
-🚧 **Currently in development** - Phase 2 focuses on AI-powered explainability and human-readable audit reasoning.
+🚧 **Currently in development** - Phase 4 focuses on payment instruction generation, settlement visibility, and comprehensive payment tracking for receipt audit trails.
 
-- **Status**: Active development on `phase-2-explainability` branch
-- **Features**: LLM integration, explainability API endpoints, decision audit trails
-- **Issue Tracker**: [Phase 2 Issues](https://github.com/ahsanazmi1/weave/issues?q=is%3Aopen+is%3Aissue+label%3Aphase-2)
-- **Timeline**: Weeks 4-8 of OCN development roadmap
+- **Status**: Active development on `phase-4-instruction` branch
+- **Features**: Payment instruction schemas, settlement visibility, payment tracking, instruction validation
+- **Issue Tracker**: [Phase 4 Issues](https://github.com/ahsanazmi1/weave/issues?q=is%3Aopen+is%3Aissue+label%3Aphase-4)
+- **Timeline**: Weeks 12-16 of OCN development roadmap
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed Phase 4 progress and features.
+
+## Payment Processor Connectors (Phase 8)
+
+Weave includes integrated connectors for major payment processors with deterministic stub responses for development and testing.
+
+### Supported Processors
+
+- **Carat** (`src/weave/connectors/carat.py`) - Specializes in ACH and real-time payments with competitive pricing
+- **Stripe** (`src/weave/connectors/stripe.py`) - Global card processing with balanced pricing and comprehensive features  
+- **Adyen** (`src/weave/connectors/adyen.py`) - Premium global payments with fast settlement speeds
+
+### Connector Characteristics
+
+| Processor | Focus | Pricing | Settlement | Global Reach |
+|-----------|-------|---------|------------|--------------|
+| **Carat** | ACH, RTP, FedNow | Lowest fees (25% discount) | Real-time/Next-day | US-focused |
+| **Stripe** | Card payments | Market rates (2.9% + $0.30) | 2-day standard | Global |
+| **Adyen** | Multi-rail global | Premium rates (10% markup) | Next-day (premium) | Global |
+
+### Using Connectors
+
+```python
+from src.weave.connectors import get_carat_connector, get_stripe_connector, get_adyen_connector
+from src.weave.enhanced_bid_broadcaster import get_enhanced_bid_broadcaster
+
+# Get connector instances
+carat = get_carat_connector()
+stripe = get_stripe_connector()
+adyen = get_adyen_connector()
+
+# Use enhanced broadcaster for multi-processor auctions
+broadcaster = get_enhanced_bid_broadcaster()
+bid_responses, metadata = broadcaster.broadcast_bid_requests(bid_requests)
+```
+
+### Replacing Stubs with Real APIs
+
+To replace stub responses with real processor APIs:
+
+#### 1. **Carat Integration**
+
+```python
+# In src/weave/connectors/carat.py
+def _is_api_available(self) -> bool:
+    try:
+        # Replace with actual Carat health check
+        response = requests.get(f"{self.base_url}/health", 
+                              headers={"Authorization": f"Bearer {self.api_key}"},
+                              timeout=5)
+        return response.status_code == 200
+    except:
+        return False
+
+def _send_real_request(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+    # Replace with actual Carat bid request API
+    response = requests.post(
+        f"{self.base_url}/v1/bids",
+        headers={
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        },
+        json=payload,
+        timeout=30
+    )
+    response.raise_for_status()
+    return response.json()
+```
+
+#### 2. **Stripe Integration**
+
+```python
+# In src.weave/connectors/stripe.py
+def _send_real_request(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+    # Replace with actual Stripe payment methods API
+    response = requests.post(
+        f"{self.base_url}/v1/payment_methods/calculate_fees",
+        headers={
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        },
+        json=payload,
+        timeout=30
+    )
+    response.raise_for_status()
+    return response.json()
+```
+
+#### 3. **Adyen Integration**
+
+```python
+# In src/weave/connectors/adyen.py
+def _send_real_request(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+    # Replace with actual Adyen payments API
+    response = requests.post(
+        f"{self.base_url}/v1/payments/estimate",
+        headers={
+            "X-API-Key": self.api_key,
+            "Content-Type": "application/json"
+        },
+        json=payload,
+        timeout=30
+    )
+    response.raise_for_status()
+    return response.json()
+```
+
+#### 4. **Environment Configuration**
+
+```bash
+# Set API keys for production
+export CARAT_API_KEY="your_carat_api_key"
+export STRIPE_SECRET_KEY="your_stripe_secret_key"
+export ADYEN_API_KEY="your_adyen_api_key"
+
+# Initialize connectors with real API keys
+carat = get_carat_connector(api_key=os.getenv("CARAT_API_KEY"))
+stripe = get_stripe_connector(api_key=os.getenv("STRIPE_SECRET_KEY"))
+adyen = get_adyen_connector(api_key=os.getenv("ADYEN_API_KEY"))
+```
+
+#### 5. **Testing Real APIs**
+
+```python
+# Test connectivity to real processors
+broadcaster = get_enhanced_bid_broadcaster()
+connectivity_status = broadcaster.test_connector_connectivity()
+
+for processor, status in connectivity_status.items():
+    if status["status"] == "connected":
+        print(f"✅ {processor}: Connected ({status['response_time_ms']}ms)")
+    else:
+        print(f"❌ {processor}: {status['error']}")
+```
+
+### Connector Testing
+
+Run comprehensive connector tests:
+
+```bash
+# Test all connectors
+pytest tests/test_connectors_integration.py -v
+
+# Test specific connector
+pytest tests/test_connectors_integration.py::TestConnectorIntegration::test_carat_connector_deterministic_bids -v
+
+# Test enhanced broadcaster
+pytest tests/test_connectors_integration.py::TestConnectorIntegration::test_enhanced_broadcaster_aggregation -v
+```
+
+### CloudEvents Integration
+
+Connectors automatically emit CloudEvents for bid requests and responses:
+
+- `ocn.weave.bid_request.v1` - Bid request events
+- `ocn.weave.bid_response.v1` - Bid response events  
+- `ocn.weave.auction_completion.v1` - Auction completion events
+
+These events integrate with the OCN event schema system for comprehensive payment tracking and audit trails.
 
 ## Purpose
 

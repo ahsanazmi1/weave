@@ -241,3 +241,4 @@ def reset_connector_registry():
     """Reset the global connector registry (useful for testing)."""
     global _global_registry
     _global_registry = None
+

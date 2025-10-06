@@ -1,0 +1,52 @@
+{
+  "version": "1.0.0",
+  "trained_on": "2025-10-02T22:05:58.876610",
+  "model_type": "RandomForestRegressor",
+  "feature_names": [
+    "cart_total_amount",
+    "cart_item_count",
+    "ach_base_cost_bps",
+    "ach_settlement_days",
+    "debit_base_cost_bps",
+    "debit_settlement_days",
+    "credit_base_cost_bps",
+    "credit_settlement_days",
+    "market_volatility",
+    "competitor_pressure",
+    "processor_capacity_utilization",
+    "historical_ach_win_rate",
+    "historical_debit_win_rate",
+    "historical_credit_win_rate",
+    "historical_avg_effective_cost",
+    "transaction_risk_score",
+    "merchant_risk_score",
+    "fraud_likelihood",
+    "hour_of_day",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday",
+    "is_peak_hours",
+    "customer_lifetime_value",
+    "customer_transaction_frequency",
+    "network_congestion",
+    "processor_maintenance_mode",
+    "regulatory_compliance_required",
+    "merchant_category_fashion",
+    "merchant_category_electronics",
+    "channel_online",
+    "channel_mobile",
+    "customer_segment_premium",
+    "customer_preferred_rail_debit",
+    "customer_preferred_rail_credit",
+    "currency_USD",
+    "currency_EUR"
+  ],
+  "target_variables": [
+    "effective_cost_bps"
+  ],
+  "performance_metrics": {
+    "r2_score": 0.8942271350973148,
+    "mae": 3.9392473383671094,
+    "rmse": 4.989087943528855
+  }
+}

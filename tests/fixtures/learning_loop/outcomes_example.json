@@ -1,0 +1,94 @@
+{
+  "t0_outcome_example": {
+    "outcome_type": "t0_immediate",
+    "trace_id": "test_trace_003",
+    "instruction_id": "test_instruction_003",
+    "cohort_id": "small_retail_ACH_bank_transfer_US",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "payment_data": {
+      "amount": 250.0,
+      "currency": "USD",
+      "rail_type": "ACH",
+      "instrument_type": "bank_transfer",
+      "processor_id": "carat"
+    },
+    "auth_result": {
+      "status": "approved",
+      "auth_code": "AUTH_123456",
+      "decline_reason": null,
+      "processor_fee": 3.75,
+      "auth_id": "carat_auth_001"
+    },
+    "immediate_metrics": {
+      "approval_status": "approved",
+      "processing_time_ms": 245,
+      "fraud_check": "passed",
+      "risk_score": 0.25,
+      "approval_score": 0.96
+    },
+    "additional_context": {
+      "merchant_category": "retail",
+      "geographic_region": "US"
+    }
+  },
+  "tx_outcome_example": {
+    "outcome_type": "tx_settled",
+    "trace_id": "test_trace_003",
+    "instruction_id": "test_instruction_003",
+    "cohort_id": "small_retail_ACH_bank_transfer_US",
+    "timestamp": "2024-01-16T10:30:00Z",
+    "payment_data": {
+      "amount": 250.0,
+      "currency": "USD",
+      "rail_type": "ACH",
+      "instrument_type": "bank_transfer",
+      "processor_id": "carat"
+    },
+    "settlement_data": {
+      "settlement_status": "settled",
+      "actual_settlement_time_hours": 22,
+      "final_cost": 3.75,
+      "fees_breakdown": {
+        "processor_fee": 3.75,
+        "network_fee": 0.0,
+        "additional_fees": 0.0
+      },
+      "settlement_reference": "ACH_SETTLE_002"
+    },
+    "final_metrics": {
+      "success": true,
+      "actual_cost": 3.75,
+      "settlement_time_hours": 22,
+      "chargeback_count": 0,
+      "dispute_count": 0,
+      "customer_rating": 0.9,
+      "merchant_satisfaction": 0.85
+    },
+    "risk_events": [],
+    "additional_context": {
+      "merchant_category": "retail",
+      "geographic_region": "US"
+    }
+  },
+  "cohort_performance_example": {
+    "cohort_id": "small_retail_ACH_bank_transfer_US",
+    "total_transactions": 150,
+    "settled_transactions": 148,
+    "approval_rate": 0.987,
+    "avg_processing_time_ms": 267.5,
+    "avg_settlement_time_hours": 23.2,
+    "avg_cost": 3.82,
+    "chargeback_rate": 0.013,
+    "customer_satisfaction": 0.87,
+    "risk_score": 0.28,
+    "last_updated": "2024-01-16T10:30:00Z"
+  }
+}
+
+
+
+
+
+
+
+

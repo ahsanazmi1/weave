@@ -181,3 +181,4 @@ class AdyenConnector(BaseProcessorConnector):
             'min_amount': 1.0,
             'max_amount': 500000.0
         }
+

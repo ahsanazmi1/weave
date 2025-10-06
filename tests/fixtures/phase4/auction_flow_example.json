@@ -1,0 +1,89 @@
+{
+  "trace_id": "test-auction-flow-123",
+  "cart_summary": {
+    "total_amount": 750.50,
+    "currency": "USD",
+    "item_count": 4,
+    "merchant_id": "merchant_retail_001",
+    "merchant_category": "retail",
+    "channel": "online"
+  },
+  "rail_candidates": [
+    {
+      "rail_type": "ACH",
+      "base_cost_bps": 15.0,
+      "settlement_days": 1,
+      "risk_score": 0.1
+    },
+    {
+      "rail_type": "debit",
+      "base_cost_bps": 25.0,
+      "settlement_days": 1,
+      "risk_score": 0.2
+    },
+    {
+      "rail_type": "credit",
+      "base_cost_bps": 35.0,
+      "settlement_days": 2,
+      "risk_score": 0.3
+    }
+  ],
+  "bid_responses": [
+    {
+      "trace_id": "test-auction-flow-123",
+      "processor_id": "stripe",
+      "auction_id": "auction-456",
+      "bps": 25.0,
+      "rebate_bps": 2.0,
+      "expected_settlement_days": 1,
+      "constraints": {
+        "min_amount": 10.0,
+        "max_amount": 10000.0,
+        "supported_rails": ["ACH", "debit"]
+      },
+      "confidence": 0.95,
+      "timestamp": "2024-01-15T10:30:00Z"
+    },
+    {
+      "trace_id": "test-auction-flow-123",
+      "processor_id": "adyen",
+      "auction_id": "auction-456",
+      "bps": 30.0,
+      "rebate_bps": 1.5,
+      "expected_settlement_days": 2,
+      "constraints": {
+        "min_amount": 5.0,
+        "max_amount": 50000.0,
+        "supported_rails": ["ACH", "debit", "credit"]
+      },
+      "confidence": 0.92,
+      "timestamp": "2024-01-15T10:30:05Z"
+    },
+    {
+      "trace_id": "test-auction-flow-123",
+      "processor_id": "carat",
+      "auction_id": "auction-456",
+      "bps": 20.0,
+      "rebate_bps": 3.0,
+      "expected_settlement_days": 1,
+      "constraints": {
+        "min_amount": 1.0,
+        "max_amount": 25000.0,
+        "supported_rails": ["ACH", "debit"]
+      },
+      "confidence": 0.88,
+      "timestamp": "2024-01-15T10:30:10Z"
+    }
+  ],
+  "expected_winner": "carat",
+  "expected_effective_cost_bps": 17.0,
+  "expected_explanation": "Carat selected due to lowest effective cost (17.0 bps) with 1-day settlement"
+}
+
+
+
+
+
+
+
+

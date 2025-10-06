@@ -1,0 +1,203 @@
+{
+  "cart_summary": {
+    "total_amount": 3500.00,
+    "currency": "USD",
+    "item_count": 3,
+    "merchant_id": "merchant_multi_rail_001",
+    "merchant_category": "ecommerce",
+    "channel": "mobile"
+  },
+  "constraints": {
+    "require_real_time": false,
+    "cross_border": true,
+    "max_cost_bps": 100.0,
+    "max_risk": 0.8
+  },
+  "expected_rail_candidates": [
+    {
+      "rail_type": "SEPA",
+      "instrument_type": "bank_transfer",
+      "base_cost_bps": 7.0,
+      "settlement_days": 1,
+      "risk_score": 0.24,
+      "is_real_time": false,
+      "is_cross_border": true,
+      "max_amount": 50000.0,
+      "min_amount": 1.0
+    },
+    {
+      "rail_type": "ACH",
+      "instrument_type": "bank_transfer",
+      "base_cost_bps": 10.5,
+      "settlement_days": 1,
+      "risk_score": 0.18,
+      "is_real_time": false,
+      "is_cross_border": false,
+      "max_amount": 1000000.0,
+      "min_amount": 1.0
+    },
+    {
+      "rail_type": "ACH",
+      "instrument_type": "debit_card",
+      "base_cost_bps": 12.0,
+      "settlement_days": 1,
+      "risk_score": 0.24,
+      "is_real_time": false,
+      "is_cross_border": false,
+      "max_amount": 10000.0,
+      "min_amount": 0.01
+    },
+    {
+      "rail_type": "SEPA",
+      "instrument_type": "debit_card",
+      "base_cost_bps": 8.0,
+      "settlement_days": 1,
+      "risk_score": 0.32,
+      "is_real_time": false,
+      "is_cross_border": true,
+      "max_amount": 10000.0,
+      "min_amount": 0.01
+    },
+    {
+      "rail_type": "Card",
+      "instrument_type": "debit_card",
+      "base_cost_bps": 120.0,
+      "settlement_days": 2,
+      "risk_score": 0.32,
+      "is_real_time": true,
+      "is_cross_border": true,
+      "max_amount": 10000.0,
+      "min_amount": 0.01
+    },
+    {
+      "rail_type": "Card",
+      "instrument_type": "credit_card",
+      "base_cost_bps": 200.0,
+      "settlement_days": 2,
+      "risk_score": 0.48,
+      "is_real_time": true,
+      "is_cross_border": true,
+      "max_amount": 100000.0,
+      "min_amount": 0.01
+    }
+  ],
+  "expected_bid_requests": [
+    {
+      "trace_id": "trace_auction_20241201_001",
+      "cart_summary": {
+        "total_amount": 3500.00,
+        "currency": "USD",
+        "item_count": 3,
+        "merchant_id": "merchant_multi_rail_001",
+        "merchant_category": "ecommerce",
+        "channel": "mobile"
+      },
+      "rail_candidates": [
+        {
+          "rail_type": "SEPA",
+          "instrument_type": "bank_transfer",
+          "base_cost_bps": 7.0,
+          "settlement_days": 1,
+          "risk_score": 0.24,
+          "is_real_time": false,
+          "is_cross_border": true,
+          "max_amount": 50000.0,
+          "min_amount": 1.0
+        }
+      ],
+      "auction_id": "auction_trace_auction_20241201_001_abc12345",
+      "timestamp": "2024-12-01T10:00:00Z"
+    }
+  ],
+  "expected_bid_responses": [
+    {
+      "trace_id": "trace_auction_20241201_001",
+      "processor_id": "wise",
+      "auction_id": "auction_trace_auction_20241201_001_abc12345",
+      "bps": 8.5,
+      "rebate_bps": 15.0,
+      "expected_settlement_days": 1,
+      "constraints": {
+        "min_amount": 1.0,
+        "max_amount": 50000.0,
+        "risk_score": 0.24,
+        "is_real_time": false,
+        "is_cross_border": true,
+        "reliability": 0.96
+      },
+      "timestamp": "2024-12-01T10:00:01Z"
+    },
+    {
+      "trace_id": "trace_auction_20241201_001",
+      "processor_id": "adyen",
+      "auction_id": "auction_trace_auction_20241201_001_abc12345",
+      "bps": 12.0,
+      "rebate_bps": 8.0,
+      "expected_settlement_days": 1,
+      "constraints": {
+        "min_amount": 0.01,
+        "max_amount": 10000.0,
+        "risk_score": 0.32,
+        "is_real_time": false,
+        "is_cross_border": true,
+        "reliability": 0.98
+      },
+      "timestamp": "2024-12-01T10:00:02Z"
+    },
+    {
+      "trace_id": "trace_auction_20241201_001",
+      "processor_id": "stripe",
+      "auction_id": "auction_trace_auction_20241201_001_abc12345",
+      "bps": 115.0,
+      "rebate_bps": 5.0,
+      "expected_settlement_days": 2,
+      "constraints": {
+        "min_amount": 0.01,
+        "max_amount": 10000.0,
+        "risk_score": 0.32,
+        "is_real_time": true,
+        "is_cross_border": true,
+        "reliability": 0.99
+      },
+      "timestamp": "2024-12-01T10:00:03Z"
+    }
+  ],
+  "expected_winner": {
+    "trace_id": "trace_auction_20241201_001",
+    "processor_id": "wise",
+    "auction_id": "auction_trace_auction_20241201_001_abc12345",
+    "bps": 8.5,
+    "rebate_bps": 15.0,
+    "expected_settlement_days": 1,
+    "constraints": {
+      "min_amount": 1.0,
+      "max_amount": 50000.0,
+      "risk_score": 0.24,
+      "is_real_time": false,
+      "is_cross_border": true,
+      "reliability": 0.96
+    },
+    "timestamp": "2024-12-01T10:00:01Z"
+  },
+  "expected_auction_metadata": {
+    "rail_candidates": 6,
+    "bid_requests": 12,
+    "total_participants": 3,
+    "total_rail_combinations": 6,
+    "multi_rail_enabled": true,
+    "constraints_applied": {
+      "require_real_time": false,
+      "cross_border": true,
+      "max_cost_bps": 100.0,
+      "max_risk": 0.8
+    }
+  }
+}
+
+
+
+
+
+
+
+
